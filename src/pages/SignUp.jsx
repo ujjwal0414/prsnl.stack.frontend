@@ -35,22 +35,22 @@ function SignUp() {
         name: "India"
     }]
     const [role, SetRole] = useState("client")
-    const {mutate:SignUpMutation,isError:isSignUpError,error:SignUpError,isPending:SignUpPending,data:SignUpData,isSuccess:isSignUpSuccess} = useMutation({
-        mutationFn:signUpUser,
-        mutationKey:["signUpUser"],
+    const { mutate: SignUpMutation, isError: isSignUpError, error: SignUpError, isPending: SignUpPending, data: SignUpData, isSuccess: isSignUpSuccess } = useMutation({
+        mutationFn: signUpUser,
+        mutationKey: ["signUpUser"],
         onError: (error) => {
-    console.log(error.response?.data?.message);
-  },
+            console.log(error.response?.data?.message);
+        },
     })
     const onSubmit = (data) => {
         const upData = { ...data, role: role }
         console.log(upData);
         SignUpMutation(upData);
     }
-    useEffect(()=>{
-        console.log(SignUpError?.response?.data,SignUpData);
-        
-    },[SignUpData,SignUpError])
+    useEffect(() => {
+        console.log(SignUpError?.response?.data, SignUpData);
+
+    }, [SignUpData, SignUpError])
     return (
         <div className='w-screen flex'>
             <div className='w-[40vw] h-screen flex flex-col items-center justify-center'>
@@ -67,8 +67,8 @@ function SignUp() {
                         <input {...register("userEmail", {
                             required: "Email is Required",
                             pattern: {
-                                value:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                message:"Email pattern did not match"
+                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                message: "Email pattern did not match"
                             },
                         })} type='email' placeholder='Enter valid email address' className="w-full mt-5 border-b py-2 border-gray-400 outline-none focus:border-[#87bba2] focus:border-b-2 " />
                         {
@@ -140,7 +140,7 @@ function SignUp() {
                     }
                     <button disabled={SignUpPending} onClick={handleSubmit(onSubmit)} className='bg-[#87bba2] w-full mt-6 py-2 rounded-md font-semibold' type='submit'>{
                         SignUpPending ? "Signing You In" : "Sign Up"
-                        }</button>
+                    }</button>
 
                     <span className='text-sm'>Already have an Account? <Link className='text-[#55828b] font-bold' to="/login">Login Now</Link></span>
                     <div className='relative mt-8 '>
@@ -152,6 +152,8 @@ function SignUp() {
             </div>
             <div className='w-[60vw] relative md:block hidden h-screen  overflow-hidden'>
                 <img src='/soft-hexagon.svg' alt='hexa' className='w-50 transform rotate-z-15 scale-500 h-50 absolute right-70 top-20  ' />
+                {/* <img src='/soft-hexagon.svg' alt='hexa' className='w-50 transform rotate-z-15 scale-500 h-50 absolute left-70 bottom-0  ' /> */}
+
             </div>
         </div>
     )
