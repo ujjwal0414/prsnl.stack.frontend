@@ -35,7 +35,7 @@ function SignUp() {
         name: "India"
     }]
     const [role, SetRole] = useState("client")
-    const {mutate:SignUpMutation,isError:isSignUpError,error:SignUpError,isPending:SignUpPending,data:SignUpData} = useMutation({
+    const {mutate:SignUpMutation,isError:isSignUpError,error:SignUpError,isPending:SignUpPending,data:SignUpData,isSuccess:isSignUpSuccess} = useMutation({
         mutationFn:signUpUser,
         mutationKey:["signUpUser"],
         onError: (error) => {
@@ -132,14 +132,22 @@ function SignUp() {
                             })
                         }
                     </div>
-                    <button onClick={handleSubmit(onSubmit)} className='bg-[#87bba2] w-full mt-6 py-2 rounded-md font-semibold' type='submit'>SignUp</button>
+                    {
+                        isSignUpSuccess && <p className='text-sm text-gray-600'>User signed in</p>
+                    }
+                    {
+                        isSignUpError && <p className='text-sm text-red-600'>{SignUpError?.response?.data?.message}</p>
+                    }
+                    <button disabled={SignUpPending} onClick={handleSubmit(onSubmit)} className='bg-[#87bba2] w-full mt-6 py-2 rounded-md font-semibold' type='submit'>{
+                        SignUpPending ? "Signing You In" : "Sign Up"
+                        }</button>
 
                     <span className='text-sm'>Already have an Account? <Link className='text-[#55828b] font-bold' to="/login">Login Now</Link></span>
                     <div className='relative mt-8 '>
                         <span className='absolute left-[50%] text-sm -translate-x-2 bg-white -top-3'>OR</span>
                         <div className='border border-gray-400' />
                     </div>
-                    <button className='w-full flex items-center justify-center py-2 rounded-md font-semibold border-2 mt-8 border-[#55828b]'>SignUp with <img className='h-8 mt-1 ml-1' src="/googleSvg.svg" alt='google' /></button>
+                    <button disabled={SignUpPending} className='w-full flex items-center justify-center py-2 rounded-md font-semibold border-2 mt-8 border-[#55828b]'>SignUp with <img className='h-8 mt-1 ml-1' src="/googleSvg.svg" alt='google' /></button>
                 </div>
             </div>
             <div className='w-[60vw] relative md:block hidden h-screen  overflow-hidden'>
