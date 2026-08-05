@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Icon } from './Icon'
+import { Icon } from '../Components/Icon.jsx'
 import { useEnv } from '../hooks/useEnv.js'
 import { FaUserAstronaut } from "react-icons/fa6";
 import { GrVend } from "react-icons/gr";
