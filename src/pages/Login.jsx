@@ -58,14 +58,14 @@ function Login() {
                         }
                         </form>
                         
-                        <button onClick={handleSubmit(onSubmit)} className='bg-[#87bba2] w-full mt-6 py-2 rounded-md font-semibold' type='submit'>SignUp</button>
+                        <button onClick={handleSubmit(onSubmit)} className='bg-[#87bba2] w-full mt-6 py-2 rounded-md font-semibold' type='submit'>Login</button>
                     
                     <span className='text-sm'>Don't have an Account? <Link className='text-[#55828b] font-bold' to="/signup">SignUp Now</Link></span>
                     <div className='relative mt-8 '>
                         <span className='absolute left-[50%] text-sm -translate-x-2 bg-white -top-3'>OR</span>
                         <div className='border border-gray-400' />
                     </div>
-                    <button className='w-full flex items-center justify-center py-2 rounded-md font-semibold border-2 mt-8 border-[#55828b]'>SignUp with <img className='h-8 mt-1 ml-1' src="/googleSvg.svg" alt='google' /></button>
+                    <button className='w-full flex items-center justify-center py-2 rounded-md font-semibold border-2 mt-8 border-[#55828b]'>Login with <img className='h-8 mt-1 ml-1' src="/googleSvg.svg" alt='google' /></button>
                 </div>
             </div>
             <div className='w-[60vw] relative md:block hidden h-screen  overflow-hidden'>

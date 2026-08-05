@@ -9,6 +9,8 @@ import { useForm } from 'react-hook-form';
 function SignUp() {
     const projEnv = useEnv((state) => state.environment)
     const { register,handleSubmit,formState:{errors} } = useForm();
+    const [countryValue,setValue] = useState("+91");
+    const [showCountryValues,setCountryValue] = useState(false);
     const roleSelector = [{
         btnCnt: "Client",
         Env: "all",
@@ -24,6 +26,12 @@ function SignUp() {
         Env: "dev",
         icon: <MdAdminPanelSettings />,
         role:"admin"
+    }]
+    const countryList = [{
+        country:"in",
+        logo:"/indiaFlag.svg",
+        code:"+91",
+        name:"India"
     }]
     const [role,SetRole] = useState("client")
     const onSubmit = (data) =>{
@@ -71,8 +79,21 @@ function SignUp() {
                                 {errors?.password?.message}
                             </span>
                         }
+                        <div className='w-full flex gap-2 mt-3'>
+                            <select className='w-[30%] outline-none border-none' >
+                            {
+                                countryList.map((item,idx)=><option value={item.code}>
+                                    
+                                    <span >{item.code}{item.name}</span>
+                                </option>)
+                            }
+                        </select>
+                        <input placeholder='Enter phone number' className='w-[70%] border-b py-2 border-gray-400 outline-none focus:border-[#87bba2] focus:border-b-2 ' {...register("phone",{
+                            required:"Enter phone number"
+                        })} type='text' />
+                        </div>
                         </form>
-                        <div className='flex gap-2 mt-2 justify-evenly'>
+                        <div className='flex gap-2 mt-3 justify-evenly'>
                             {
                                 roleSelector.map((item, idx) => {
                                     return ((item.Env == "all" || (projEnv == "dev" && item.btnCnt == "Admin")) && <button onClick={()=>{SetRole(item.role)}} className={`flex border rounded-md py-3 border-gray-400 font-semibold hover:bg-[#87bba2] hover:text-white transition-all duration-75 justify-center w-full items-center ${role == item.role ? "bg-[#87bba2]" : ""}`} key={idx}>
