@@ -6,11 +6,12 @@ import { GrVend } from "react-icons/gr";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
+import Select from 'react-select';
 function SignUp() {
     const projEnv = useEnv((state) => state.environment)
     const { register,handleSubmit,formState:{errors} } = useForm();
-    const [countryValue,setValue] = useState("+91");
-    const [showCountryValues,setCountryValue] = useState(false);
+
+
     const roleSelector = [{
         btnCnt: "Client",
         Env: "all",
@@ -61,7 +62,7 @@ function SignUp() {
                                 errors.email?.message
                                 }</span>
                         }
-                        <span>
+                        <span className='mb-6 '>
                             <input {...register("password",{
                                 required:"Password is required",
                                 minLength:{
@@ -79,19 +80,29 @@ function SignUp() {
                                 {errors?.password?.message}
                             </span>
                         }
-                        <div className='w-full flex gap-2 mt-3'>
-                            <select className='w-[30%] outline-none border-none' >
-                            {
-                                countryList.map((item,idx)=><option value={item.code}>
-                                    
-                                    <span >{item.code}{item.name}</span>
-                                </option>)
+                        
+                          
+                        <div className='relative  mt-6  w-full'>
+                            <span className='absolute top-1/2 left-2 transform -translate-y-1/2'>+91</span>
+                            <input placeholder='Enter phone number' className=' pl-12  w-full border-b py-2 border-gray-400 outline-none focus:border-[#87bba2] focus:border-b-2 ' {...register("phone",{
+                            required:"Enter phone number",
+                            maxLength:{
+                                value:10,
+                                message:"Length should be 10"
+                            },
+                            minLength:{
+                                value:10,
+                                message:"Length should be 10"
                             }
-                        </select>
-                        <input placeholder='Enter phone number' className='w-[70%] border-b py-2 border-gray-400 outline-none focus:border-[#87bba2] focus:border-b-2 ' {...register("phone",{
-                            required:"Enter phone number"
+                            
                         })} type='text' />
                         </div>
+                        {
+                            errors.phone && <span className='text-[12px] text-red-800'>
+                                {errors?.phone?.message}
+                            </span>
+                        }
+                        
                         </form>
                         <div className='flex gap-2 mt-3 justify-evenly'>
                             {
