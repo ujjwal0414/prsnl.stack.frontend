@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '../Components/Icon.jsx'
 import { useEnv } from '../hooks/useEnv.js'
 import { FaUserAstronaut } from "react-icons/fa6";
@@ -6,16 +6,23 @@ import { GrVend } from "react-icons/gr";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { loginUser } from '../api/auth/login.js';
 function Login() {
     
     const { register,handleSubmit,formState:{errors} } = useForm();
-    
-    const [role,SetRole] = useState("client")
     const onSubmit = (data) =>{
-        const upData = {...data,role:role}
-        console.log(upData);
+      console.log(data);
+      
+        const upData = {...data}
+        LoginMutation(data);
         
     }
+    const {mutate:LoginMutation,isSuccess:isLoginSuccess,error:LoginError,data:LoginData,isPending:isLoginPending,isError:isLoginError} = useMutation({
+      mutationFn:loginUser,
+      mutationKey:["login"]
+    })
+
     return (
         <div className='w-screen flex'>
             <div className='w-[40vw] h-screen flex flex-col items-center justify-center'>
@@ -29,13 +36,13 @@ function Login() {
 
                     </div>
                     <form  className="w-full">
-                        <input {...register("email",{
+                        <input {...register("userEmail",{
                             required:"Email is Required",
                             pattern:"/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/."
                         })} type='email' placeholder='Enter valid email address' className="w-full mt-5 border-b py-2 border-gray-400 outline-none focus:border-[#87bba2] focus:border-b-2 " />
                         {
-                            errors?.email && <span className='text-[12px] text-red-800'>{
-                                errors.email?.message
+                            errors?.userEmail && <span className='text-[12px] text-red-800'>{
+                                errors.userEmail?.message
                                 }</span>
                         }
                         <span>
@@ -57,15 +64,20 @@ function Login() {
                             </span>
                         }
                         </form>
-                        
-                        <button onClick={handleSubmit(onSubmit)} className='bg-[#87bba2] w-full mt-6 py-2 rounded-md font-semibold' type='submit'>Login</button>
+                        {
+                          isLoginSuccess && <span className='text-sm text-gray-400'>User logged in</span>
+                        }
+                        {
+                          isLoginError && <span className='text-sm text-red-600'>{LoginError?.response?.data?.message || "Login failed"}</span>
+                        }
+                        <button disabled={isLoginPending} onClick={handleSubmit(onSubmit)} className='bg-[#87bba2] w-full mt-6 py-2 rounded-md font-semibold' type='submit'>{isLoginPending ? "Loggin you in":"Log In"}</button>
                     
                     <span className='text-sm'>Don't have an Account? <Link className='text-[#55828b] font-bold' to="/signup">SignUp Now</Link></span>
                     <div className='relative mt-8 '>
                         <span className='absolute left-[50%] text-sm -translate-x-2 bg-white -top-3'>OR</span>
                         <div className='border border-gray-400' />
                     </div>
-                    <button className='w-full flex items-center justify-center py-2 rounded-md font-semibold border-2 mt-8 border-[#55828b]'>Login with <img className='h-8 mt-1 ml-1' src="/googleSvg.svg" alt='google' /></button>
+                    <button disabled={isLoginPending} className='w-full flex items-center justify-center py-2 rounded-md font-semibold border-2 mt-8 border-[#55828b]'>Login with <img className='h-8 mt-1 ml-1' src="/googleSvg.svg" alt='google' /></button>
                 </div>
             </div>
             <div className='w-[60vw] relative md:block hidden h-screen  overflow-hidden'>
