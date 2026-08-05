@@ -6,8 +6,8 @@ import './App.css'
 import { Routes } from 'react-router'
 import { Route } from 'react-router'
 import { PrivateComponent } from './Components/PrivateComponent'
-import { Login } from './Components/Login'
-import { SignUp } from './Components/SignUp'
+import { Login } from './pages/Login'
+import { SignUp } from './pages/SignUp'
 function App() {
   const [count, setCount] = useState(0)
 
