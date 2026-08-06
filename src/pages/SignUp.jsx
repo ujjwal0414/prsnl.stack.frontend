@@ -53,8 +53,8 @@ function SignUp() {
     }, [SignUpData, SignUpError])
     return (
         <div className='w-screen flex'>
-            <div className='w-[40vw] h-screen flex flex-col items-center justify-center'>
-                <div className='w-[80%]'>
+            <div className='md:w-[40vw] w-screen h-screen flex flex-col items-center justify-center'>
+                <div className='md:w-[80%] w-[90%]'>
                     <Icon />
                     <div className='mt-4'>
                         <span className='text-gray-400 text-4xl'>
