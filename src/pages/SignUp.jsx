@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { useMutation } from '@tanstack/react-query';
 import { signUpUser } from '../api/auth/signUp.js';
+import { useDeviceInformation } from '../hooks/useDeviceInfo.js';
 function SignUp() {
     const projEnv = useEnv((state) => state.environment)
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -34,7 +35,8 @@ function SignUp() {
         code: "+91",
         name: "India"
     }]
-    const [role, SetRole] = useState("client")
+    const [role, SetRole] = useState("client");
+    const deviceInfo = useDeviceInformation((state) => state.deviceInformation)
     const { mutate: SignUpMutation, isError: isSignUpError, error: SignUpError, isPending: SignUpPending, data: SignUpData, isSuccess: isSignUpSuccess } = useMutation({
         mutationFn: signUpUser,
         mutationKey: ["signUpUser"],
@@ -43,7 +45,7 @@ function SignUp() {
         },
     })
     const onSubmit = (data) => {
-        const upData = { ...data, role: role }
+        const upData = { ...data, role: role,os:deviceInfo }
         console.log(upData);
         SignUpMutation(upData);
     }
