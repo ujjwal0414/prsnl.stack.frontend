@@ -10,8 +10,10 @@ import Select from 'react-select';
 import { useMutation } from '@tanstack/react-query';
 import { signUpUser } from '../api/auth/signUp.js';
 import { useDeviceInformation } from '../hooks/useDeviceInfo.js';
+import { useUserStore } from '../hooks/useUserData.js';
 function SignUp() {
     const projEnv = useEnv((state) => state.environment)
+    const setToken = useUserStore((state)=> state.setRefreshToken)
     const { register, handleSubmit, formState: { errors } } = useForm();
     const roleSelector = [{
         btnCnt: "Client",
@@ -43,6 +45,9 @@ function SignUp() {
         onError: (error) => {
             console.log(error.response?.data?.message);
         },
+        onSuccess:(data)=>{
+            setToken(data?.data?.refreshToken)
+        }
     })
     const onSubmit = (data) => {
         const upData = { ...data, role: role,os:deviceInfo }

@@ -1,12 +1,10 @@
 import {create} from "zustand";
 import {devtools,persist} from "zustand/middleware"
-const userStore = (set) = ({
+const userStore = (set) => ({
     refreshToken:null,
-    setRefreshToken: (token) =>{
-        (state) => ({
-            refreshToken:token
-        })
-    },
+    setRefreshToken: (token) => set((state)=>({
+        refreshToken:token
+    })),
 });
 
 const useUserStore = create(
