@@ -1,48 +1,103 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
-import { sideBarData } from "../../constants/sideBarData.jsx";
-import { FaChevronLeft, FaChevronRight, FaChevronDown } from "react-icons/fa6";
+import {
+  FaChevronDown,
+  FaChevronLeft,
+  FaChevronRight,
+  FaXmark,
+} from "react-icons/fa6";
+import { sideBarData } from "../../constants/sideBarData";
 
-const Sidebar = ({ role = "admin" }) => {
+const Sidebar = ({
+  role = "admin",
+  mobileOpen,
+  setMobileOpen,
+}) => {
   const [collapsed, setCollapsed] = useState(false);
   const [openMenu, setOpenMenu] = useState("");
 
+  const closeMobileSidebar = () => {
+    if (window.innerWidth < 1024) {
+      setMobileOpen(false);
+    }
+  };
+
   return (
-    <aside
-      className={`bg-[#ecf2ef] text-[#2d4347] h-screen transition-all duration-300 ${
-        collapsed ? "w-15" : "w-[20vw]"
-      }`}
-    >
-      {/* Header */}
-      <div className="h-[10vh] flex items-center justify-between px-4 border-b border-[#87bba2]">
-        {!collapsed && <p className=" text-2xl font-semibold">Tool<span className="text-[#55828b]">Box</span></p>
-}
+    <>
+      {/* Mobile Overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
 
-        <button onClick={() => setCollapsed(!collapsed)}>
-          {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-        </button>
-      </div>
+      <aside
+        className={`
+          fixed lg:static top-0 left-0 z-50 h-screen
+          bg-[#ecf2ef] text-[#2d4347]
+          shadow-lg lg:shadow-none
+          transition-all duration-300
 
-      {/* Menu */}
-      <nav className="p-2 h-[80vh]  space-y-1">
-        {sideBarData
-          .filter((item) => item.role.includes(role))
-          .map((item) => {
-            const hasChildren = item.children?.length;
+          ${collapsed ? "lg:w-16" : "lg:w-[20vw]"}
+          w-72
 
-            return (
-              <div key={item.name}>
-                {hasChildren ? (
-                  <>
+          ${
+            mobileOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
+          }
+        `}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between h-16 px-4 border-b border-[#d5e2d9]">
+          {!collapsed && (
+            <h1 className="font-bold text-xl">ToolBox</h1>
+          )}
+
+          <div className="flex items-center gap-2">
+            {/* Desktop Collapse */}
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="hidden lg:flex p-2 rounded hover:bg-[#cee5d6]"
+            >
+              {collapsed ? (
+                <FaChevronRight />
+              ) : (
+                <FaChevronLeft />
+              )}
+            </button>
+
+            {/* Mobile Close */}
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="lg:hidden p-2 rounded hover:bg-[#cee5d6]"
+            >
+              <FaXmark />
+            </button>
+          </div>
+        </div>
+
+        {/* Menu */}
+        <nav className="p-2 overflow-y-auto h-[calc(100vh-64px)] space-y-1">
+          {sideBarData
+            .filter((item) => item.role.includes(role))
+            .map((item) => {
+              const hasChildren = item.children?.length > 0;
+              const isOpen = openMenu === item.name;
+
+              if (hasChildren) {
+                return (
+                  <div key={item.name}>
                     <button
                       onClick={() =>
-                        setOpenMenu((prev) =>
-                          prev === item.name ? "" : item.name
-                        )
+                        setOpenMenu(isOpen ? "" : item.name)
                       }
-                      className="w-full flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#cee5d6]"
+                      className="w-full flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#cee5d6] transition"
                     >
-                      <span className="text-xl">{item.icon}</span>
+                      <span className="text-xl shrink-0">
+                        {item.icon}
+                      </span>
 
                       {!collapsed && (
                         <>
@@ -51,60 +106,69 @@ const Sidebar = ({ role = "admin" }) => {
                           </span>
 
                           <FaChevronDown
-                            className={`transition ${
-                              openMenu === item.name ? "rotate-180" : ""
+                            className={`transition-transform duration-300 ${
+                              isOpen ? "rotate-180" : ""
                             }`}
                           />
                         </>
                       )}
                     </button>
 
-                    {!collapsed && openMenu === item.name && (
-                      <div className="ml-8 mt-1 space-y-1">
+                    {!collapsed && isOpen && (
+                      <div className="ml-7 mt-1 space-y-1 border-l border-[#c8d8cd] pl-3">
                         {item.children
-                          .filter((child) => child.role.includes(role))
+                          .filter((child) =>
+                            child.role.includes(role)
+                          )
                           .map((child) => (
                             <NavLink
                               key={child.path}
                               to={child.path}
+                              onClick={closeMobileSidebar}
                               className={({ isActive }) =>
-                                `flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${
+                                `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition ${
                                   isActive
-                                    ? "bg-blue-600"
+                                    ? "bg-[#2d4347] text-white"
                                     : "hover:bg-[#cee5d6]"
                                 }`
                               }
                             >
-                              {child.icon}
-                              {child.name}
+                              <span>{child.icon}</span>
+                              <span>{child.name}</span>
                             </NavLink>
                           ))}
                       </div>
                     )}
-                  </>
-                ) : (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 rounded-lg px-3 py-2 ${
-                        isActive ? "bg-blue-600" : "hover:bg-[#cee5d6]"
-                      }`
-                    }
-                  >
-                    <span className="text-xl">{item.icon}</span>
+                  </div>
+                );
+              }
 
-                    {!collapsed && <span>{item.name}</span>}
-                  </NavLink>
-                )}
-              </div>
-            );
-          })}
-      </nav>
-      <div className="">
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={closeMobileSidebar}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-3 py-2 transition ${
+                      isActive
+                        ? "bg-[#2d4347] text-white"
+                        : "hover:bg-[#cee5d6]"
+                    }`
+                  }
+                >
+                  <span className="text-xl shrink-0">
+                    {item.icon}
+                  </span>
 
-      </div>
-    </aside>
+                  {!collapsed && (
+                    <span>{item.name}</span>
+                  )}
+                </NavLink>
+              );
+            })}
+        </nav>
+      </aside>
+    </>
   );
 };
 

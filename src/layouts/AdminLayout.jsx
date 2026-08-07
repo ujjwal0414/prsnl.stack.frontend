@@ -4,8 +4,11 @@ import { getAdmin } from "../api/auth/checkAuth";
 import { Loading } from "../Components/Loading";
 import { UnAuth } from "../Components/UnAuthPage";
 import { useUserStore } from "../hooks/useUserData";
+import { useState } from "react";
+import { NavBar } from "../Components/common/NavBar";
 
 const AdminLayout = () =>{
+    const [mobileOpen, setMobileOpen] = useState(false);
     const { data, isPending, isError, error } = useQuery({
     queryKey: ["getAdmin"],
     queryFn: getAdmin,
@@ -33,8 +36,15 @@ if(data){
         
     }
 return <div className="w-screen h-screen flex">
-    <Sidebar role="admin"/>
+    <Sidebar role="admin"
+    mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+
+    />
+    <div className="flex flex-col">
+   <NavBar setMobileOpen = {setMobileOpen}/>
     <Outlet/>
+   </div>
 </div>;
 }
 export {AdminLayout}

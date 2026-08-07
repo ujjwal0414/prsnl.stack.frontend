@@ -5,12 +5,15 @@ import { Loading } from "../Components/Loading";
 import { UnAuth } from "../Components/UnAuthPage";
 import { useUserStore } from "../hooks/useUserData";
 import { Sidebar } from "../Components/common/Sidebar";
+import { NavBar } from "../Components/common/NavBar";
+import { useState } from "react";
 
 const ClientLayout = () =>{
     const { data, isPending, isError, error } = useQuery({
     queryKey: ["getClient"],
     queryFn: getClient,
 });
+const [mobileOpen, setMobileOpen] = useState(false);
 const role = useUserStore((state)=>state.role)
 if (isPending) return <Loading />;
 
@@ -35,8 +38,16 @@ if(data){
     }
 
 return <div className="w-screen h-screen flex">
-    <Sidebar role="client"/>
+    <Sidebar role="client"
+    mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+
+    />
+
+   <div className="flex flex-col">
+   <NavBar setMobileOpen = {setMobileOpen}/>
     <Outlet/>
+   </div>
 </div>;
 }
 export {ClientLayout}

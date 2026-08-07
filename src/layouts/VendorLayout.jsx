@@ -4,8 +4,11 @@ import {  getVendor } from "../api/auth/checkAuth";
 import { Loading } from "../Components/Loading";
 import { UnAuth } from "../Components/UnAuthPage";
 import { useUserStore } from "../hooks/useUserData";
+import { useState } from "react";
+import { NavBar } from "../Components/common/NavBar";
 
 const VendorLayout = () =>{
+    const [mobileOpen, setMobileOpen] = useState(false);
     const { data, isPending, isError, error } = useQuery({
     queryKey: ["getVendor"],
     queryFn: getVendor,
@@ -34,8 +37,15 @@ if(data){
     }
 
 return <div className="w-screen h-screen flex">
-    <Sidebar role="vendor"/>
+    <Sidebar role="vendor"
+    mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+
+    />
+    <div className="flex flex-col">
+   <NavBar setMobileOpen = {setMobileOpen}/>
     <Outlet/>
+   </div>
 </div>;
 }
 export {VendorLayout}
