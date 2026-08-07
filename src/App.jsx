@@ -12,6 +12,7 @@ import { UAParser } from 'ua-parser-js'
 import { useDeviceInformation } from './hooks/useDeviceInfo'
 import { useUserStore } from './hooks/useUserData'
 import { Admin } from './pages/Admin'
+import { AdminLayout } from './layouts/AdminLayout'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,7 +38,7 @@ function App() {
         <Route path='vendor'>
           <Route index element={<h2>Vendor home</h2>}/>
         </Route>
-        <Route path='admin'>
+        <Route path='admin' element={<AdminLayout/>}>
           <Route index element={<Admin/>}/>
         </Route>
       </Route>
