@@ -1,14 +1,14 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Outlet } from "react-router";
-import { getAdmin } from "../api/auth/checkAuth";
+import {  getVendor } from "../api/auth/checkAuth";
 import { Loading } from "../Components/Loading";
 import { UnAuth } from "../Components/UnAuthPage";
 import { useUserStore } from "../hooks/useUserData";
 
-const AdminLayout = () =>{
+const VendorLayout = () =>{
     const { data, isPending, isError, error } = useQuery({
-    queryKey: ["getAdmin"],
-    queryFn: getAdmin,
+    queryKey: ["getVendor"],
+    queryFn: getVendor,
 });
 const role = useUserStore((state)=>state.role)
 if (isPending) return <Loading />;
@@ -34,6 +34,7 @@ if(data){
         }
         
     }
+
 return <Outlet />;
 }
-export {AdminLayout}
+export {VendorLayout}

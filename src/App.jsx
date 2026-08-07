@@ -14,6 +14,8 @@ import { useUserStore } from './hooks/useUserData'
 import { Admin } from './pages/Admin'
 import { AdminLayout } from './layouts/AdminLayout'
 import { UnAuth } from './Components/UnAuthPage'
+import { VendorLayout } from './layouts/VendorLayout'
+import { ClientLayout } from './layouts/ClientLayout'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -33,10 +35,10 @@ function App() {
     <Routes>
       <Route element={<PrivateComponent/>} >  {/* Role based navigation has to be done */}
         <Route path='/' element={<h1>Home page</h1>}/>
-        <Route path='client'>
+        <Route path='client' element={<ClientLayout/>}>
           <Route index element={<h2>User home</h2>}/>
         </Route>
-        <Route path='vendor'>
+        <Route path='vendor' element={<VendorLayout/>}>
           <Route index element={<h2>Vendor home</h2>}/>
         </Route>
         <Route path='admin' element={<AdminLayout/>}>
