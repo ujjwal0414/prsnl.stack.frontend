@@ -9,7 +9,7 @@ const Sidebar = ({ role = "admin" }) => {
 
   return (
     <aside
-      className={`bg-[#dfe8e3] text-black h-screen transition-all duration-300 ${
+      className={`bg-[#ecf2ef] text-[#2d4347] h-screen transition-all duration-300 ${
         collapsed ? "w-20" : "w-[20vw]"
       }`}
     >
@@ -39,7 +39,7 @@ const Sidebar = ({ role = "admin" }) => {
                           prev === item.name ? "" : item.name
                         )
                       }
-                      className="w-full flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-zinc-800"
+                      className="w-full flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#cee5d6]"
                     >
                       <span className="text-xl">{item.icon}</span>
 
@@ -70,7 +70,7 @@ const Sidebar = ({ role = "admin" }) => {
                                 `flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${
                                   isActive
                                     ? "bg-blue-600"
-                                    : "hover:bg-zinc-800"
+                                    : "hover:bg-[#cee5d6]"
                                 }`
                               }
                             >
@@ -87,7 +87,7 @@ const Sidebar = ({ role = "admin" }) => {
                     to={item.path}
                     className={({ isActive }) =>
                       `flex items-center gap-3 rounded-lg px-3 py-2 ${
-                        isActive ? "bg-blue-600" : "hover:bg-zinc-800"
+                        isActive ? "bg-blue-600" : "hover:bg-[#cee5d6]"
                       }`
                     }
                   >

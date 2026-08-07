@@ -35,7 +35,7 @@ if(data){
     }
 
 return <div className="w-screen h-screen flex">
-    <Sidebar/>
+    <Sidebar role="client"/>
     <Outlet/>
 </div>;
 }

@@ -33,6 +33,9 @@ if(data){
         
     }
 
-return <Outlet />;
+return <div className="w-screen h-screen flex">
+    <Sidebar role="vendor"/>
+    <Outlet/>
+</div>;
 }
 export {VendorLayout}
