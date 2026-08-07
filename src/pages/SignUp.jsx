@@ -11,9 +11,12 @@ import { useMutation } from '@tanstack/react-query';
 import { signUpUser } from '../api/auth/signUp.js';
 import { useDeviceInformation } from '../hooks/useDeviceInfo.js';
 import { useUserStore } from '../hooks/useUserData.js';
+import { useNavigate } from 'react-router';
 function SignUp() {
     const projEnv = useEnv((state) => state.environment)
+    const navigate = useNavigate();
     const setToken = useUserStore((state)=> state.setRefreshToken)
+    const setRole = useUserStore((state)=>state.setRole)
     const { register, handleSubmit, formState: { errors } } = useForm();
     const roleSelector = [{
         btnCnt: "Client",
@@ -47,6 +50,10 @@ function SignUp() {
         },
         onSuccess:(data)=>{
             setToken(data?.data?.refreshToken)
+            
+            const {_doc:{role}} = data?.data
+            setRole(role);
+            navigate(`/${role}`)
         }
     })
     const onSubmit = (data) => {

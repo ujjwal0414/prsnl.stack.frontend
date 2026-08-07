@@ -4,23 +4,33 @@ import { useEnv } from '../hooks/useEnv.js'
 import { FaUserAstronaut } from "react-icons/fa6";
 import { GrVend } from "react-icons/gr";
 import { MdAdminPanelSettings } from "react-icons/md";
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { loginUser } from '../api/auth/login.js';
+import { useUserStore } from '../hooks/useUserData.js';
 function Login() {
     
     const { register,handleSubmit,formState:{errors} } = useForm();
     const onSubmit = (data) =>{
-      console.log(data);
-      
         const upData = {...data}
         LoginMutation(data);
-        
     }
+   const setToken = useUserStore((state)=> state.setRefreshToken)
+    const setRole = useUserStore((state)=>state.setRole)
+    const navigate = useNavigate();
     const {mutate:LoginMutation,isSuccess:isLoginSuccess,error:LoginError,data:LoginData,isPending:isLoginPending,isError:isLoginError} = useMutation({
       mutationFn:loginUser,
-      mutationKey:["login"]
+      mutationKey:["login"],
+      onSuccess:(data)=>{
+        console.log(data?.data);
+        const {role,refreshToken} = data.data?.data
+        console.log(role,refreshToken);
+        
+        setRole(role);
+        setToken(refreshToken)
+        navigate(`/${role}`)
+      }
     })
 
     return (

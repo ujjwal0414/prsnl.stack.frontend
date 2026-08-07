@@ -3,27 +3,43 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
-import { Routes } from 'react-router'
+import { Routes, useNavigate } from 'react-router'
 import { Route } from 'react-router'
 import { PrivateComponent } from './Components/PrivateComponent'
 import { Login } from './pages/Login'
 import { SignUp } from './pages/SignUp'
 import { UAParser } from 'ua-parser-js'
 import { useDeviceInformation } from './hooks/useDeviceInfo'
+import { useUserStore } from './hooks/useUserData'
+import { Admin } from './pages/Admin'
 
 function App() {
   const [count, setCount] = useState(0)
+  const role = useUserStore((state)=>state.role)
+  const refreshToken = useUserStore((state)=>state.refreshToken)
+  const navigate = useNavigate();
   const setDeviceInformation = useDeviceInformation((state) => state.setDeviceInformation)
   useEffect(()=>{
     const parser = new UAParser();
     const {os} = parser.getResult();
-    
+    if(role){
+      navigate(`/${role}`)
+    }
     setDeviceInformation(os)
-  },[])
+  },[role])
   return (
     <Routes>
       <Route element={<PrivateComponent/>} >  {/* Role based navigation has to be done */}
         <Route path='/' element={<h1>Home page</h1>}/>
+        <Route path='client'>
+          <Route index element={<h2>User home</h2>}/>
+        </Route>
+        <Route path='vendor'>
+          <Route index element={<h2>Vendor home</h2>}/>
+        </Route>
+        <Route path='admin'>
+          <Route index element={<Admin/>}/>
+        </Route>
       </Route>
       <Route path='/login' element={<Login/>} />
       <Route path='/signup' element={<SignUp/>} />
