@@ -4,6 +4,7 @@ import {  getClient } from "../api/auth/checkAuth";
 import { Loading } from "../Components/Loading";
 import { UnAuth } from "../Components/UnAuthPage";
 import { useUserStore } from "../hooks/useUserData";
+import { Sidebar } from "../Components/common/Sidebar";
 
 const ClientLayout = () =>{
     const { data, isPending, isError, error } = useQuery({
@@ -33,6 +34,9 @@ if(data){
         
     }
 
-return <Outlet />;
+return <div className="w-screen h-screen flex">
+    <Sidebar/>
+    <Outlet/>
+</div>;
 }
 export {ClientLayout}
