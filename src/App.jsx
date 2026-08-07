@@ -13,6 +13,7 @@ import { useDeviceInformation } from './hooks/useDeviceInfo'
 import { useUserStore } from './hooks/useUserData'
 import { Admin } from './pages/Admin'
 import { AdminLayout } from './layouts/AdminLayout'
+import { UnAuth } from './Components/UnAuthPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -44,6 +45,7 @@ function App() {
       </Route>
       <Route path='/login' element={<Login/>} />
       <Route path='/signup' element={<SignUp/>} />
+      <Route path='/unauth' element={<UnAuth/>} />
     </Routes>
   )
 }
