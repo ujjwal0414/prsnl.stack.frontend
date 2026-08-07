@@ -23,8 +23,6 @@ if (isError) {
     return <div>Something went wrong.</div>;
 }
 if(data){
-    console.log(data);
-    
         const {role:userRole} =data?.data?.data;
         if(role != userRole){
             return (<div className="w-screen h-screen flex flex-col justify-center items-center">
