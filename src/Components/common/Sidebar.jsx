@@ -10,12 +10,13 @@ const Sidebar = ({ role = "admin" }) => {
   return (
     <aside
       className={`bg-[#ecf2ef] text-[#2d4347] h-screen transition-all duration-300 ${
-        collapsed ? "w-20" : "w-[20vw]"
+        collapsed ? "w-15" : "w-[20vw]"
       }`}
     >
       {/* Header */}
       <div className="h-[10vh] flex items-center justify-between px-4 border-b border-[#87bba2]">
-        {!collapsed && <h1 className="font-semibold">Dashboard</h1>}
+        {!collapsed && <p className=" text-2xl font-semibold">Tool<span className="text-[#55828b]">Box</span></p>
+}
 
         <button onClick={() => setCollapsed(!collapsed)}>
           {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
