@@ -23,7 +23,13 @@ if (isError) {
     return <div>Something went wrong.</div>;
 }else{
     if(data){
-        console.log(data?.data);
+        const userRole =data?.data?.data;
+        if(role != userRole){
+            return (<div className="w-screen h-screen flex flex-col justify-center items-center">
+                <img  src="/role.svg" alt="unauth role" className="w-50 h-50"/>
+                <span>Unauthorized role detected</span>
+            </div>)
+        }
         
     }
 }
