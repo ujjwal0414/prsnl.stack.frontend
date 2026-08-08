@@ -47,7 +47,7 @@ const Sidebar = ({
           shadow-lg lg:shadow-none
           transition-all duration-300
 
-          ${collapsed ? "lg:w-16" : "lg:w-[20vw]"}
+          ${collapsed ? "lg:w-16" : "lg:w-[20vw] w-[80vw]"}
           w-72
 
           ${
