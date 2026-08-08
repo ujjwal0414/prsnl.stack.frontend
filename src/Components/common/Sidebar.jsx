@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import {
   FaChevronDown,
   FaChevronLeft,
@@ -7,7 +7,9 @@ import {
   FaXmark,
 } from "react-icons/fa6";
 import { sideBarData } from "../../constants/sideBarData";
-
+import { RiLogoutCircleLine } from "react-icons/ri";
+import { useUserStore } from "../../hooks/useUserData";
+import { useNavigate } from "react-router";
 const Sidebar = ({
   role = "admin",
   mobileOpen,
@@ -15,13 +17,19 @@ const Sidebar = ({
 }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [openMenu, setOpenMenu] = useState("");
-
+  const setRole = useUserStore((state)=>state.setRole);
+  const setToken = useUserStore((state)=>state.setRefreshToken);
+  const navigate = useNavigate()
   const closeMobileSidebar = () => {
     if (window.innerWidth < 1024) {
       setMobileOpen(false);
     }
   };
-
+  const handleLogout = () => {
+    setRole("");
+    setToken(null);
+    navigate("/login")
+  }
   return (
     <>
       {/* Mobile Overlay */}
@@ -50,7 +58,7 @@ const Sidebar = ({
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-[#d5e2d9]">
+        <div className="flex items-center justify-between h-[10vh] px-4 border-b border-[#d5e2d9]">
           {!collapsed && (
                       <p className=" text-2xl font-semibold">Tool<span className="text-[#55828b]">Box</span></p>
 
@@ -80,7 +88,7 @@ const Sidebar = ({
         </div>
 
         {/* Menu */}
-        <nav className="p-2 overflow-y-auto h-[calc(100vh-64px)] space-y-1">
+        <nav className="p-2 overflow-y-auto h-[80vh] space-y-1">
           {sideBarData
             .filter((item) => item.role.includes(role))
             .map((item) => {
@@ -167,7 +175,14 @@ const Sidebar = ({
                 </NavLink>
               );
             })}
+            <button onClick={handleLogout} className="ml-3 flex items-center gap-2 px-6 font-semibold bg-[#55828b] text-white rounded-lg py-3 border">
+              <RiLogoutCircleLine/><span>Logout</span>
+            </button>
         </nav>
+        <div className="h-[10vh] flex items-center gap-2 px-4 font-semibold">
+          <img src="/userImg.jpg" className="w-12.5 h-12.5 rounded-full border"/>
+          <Link className="w-[50%]" to={`/${role}/profile`}>Profile</Link>
+        </div>
       </aside>
     </>
   );
