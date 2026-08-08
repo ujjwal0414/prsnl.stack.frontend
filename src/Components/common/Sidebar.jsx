@@ -52,7 +52,8 @@ const Sidebar = ({
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-[#d5e2d9]">
           {!collapsed && (
-            <h1 className="font-bold text-xl">ToolBox</h1>
+                      <p className=" text-2xl font-semibold">Tool<span className="text-[#55828b]">Box</span></p>
+
           )}
 
           <div className="flex items-center gap-2">
