@@ -16,3 +16,4 @@ const vendorStatus = {
         className:"text-purple-300"
     }
 }
+export {vendorStatus}

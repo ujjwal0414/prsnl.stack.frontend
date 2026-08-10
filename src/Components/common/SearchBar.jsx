@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { CiSearch } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaChevronUp } from "react-icons/fa";
+import { vendorStatus } from '../../constants/status';
 function SearchBar() {
     const [isStatusOpen,setStatusOpen] = useState(false)
     const [vendorOnlineStatus,setOnlineStatus] = useState(0);
@@ -17,9 +18,12 @@ function SearchBar() {
                 </div>
                 
             </div>
-            <button className='flex items-center gap-1 text-gray-300'>
-                <span>Status</span>
+            <button className='flex flex-col  text-gray-300'>
+                <span className= "flex items-center gap-1 text-gray-500">
+                    <span>Status</span>
                 <span>{isStatusOpen ? <FaChevronUp/> : <FaAngleDown/>}</span>
+                </span>
+                <span className={`text-start text-[12px] font-semibold text-ellipsis text-nowrap ${vendorStatus[vendorOnlineStatus]?.className || ""}`}>{vendorStatus[vendorOnlineStatus]?.status || "Unknown"}</span>
             </button>
         </div>
     )
