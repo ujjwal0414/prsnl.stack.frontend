@@ -16,6 +16,7 @@ import { AdminLayout } from './layouts/AdminLayout'
 import { UnAuth } from './Components/UnAuthPage'
 import { VendorLayout } from './layouts/VendorLayout'
 import { ClientLayout } from './layouts/ClientLayout'
+import { VendorHome } from './Components/Vendor/Home/VendorHome'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -39,7 +40,7 @@ function App() {
           <Route index element={<h2>User home</h2>}/>
         </Route>
         <Route path='vendor' element={<VendorLayout/>}>
-          <Route index element={<h2>Vendor home</h2>}/>
+          <Route index element={<VendorHome/>}/>
         </Route>
         <Route path='admin' element={<AdminLayout/>}>
           <Route index element={<Admin/>}/>
