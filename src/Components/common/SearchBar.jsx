@@ -7,7 +7,7 @@ function SearchBar() {
     const [isStatusOpen,setStatusOpen] = useState(false)
     const [vendorOnlineStatus,setOnlineStatus] = useState(0);
     return (
-        <div className='bg-white lg:w-[90%] justify-evenly w-[95%] rounded-lg py-3 px-2 flex items-center'>
+        <div className='bg-white lg:w-[90%] justify-evenly w-[95%] gap-2 lg:gap-0 rounded-lg py-3 px-2 flex items-center'>
             <div className='relative w-[90%]'>
                 <input type='text' className='w-full bg-gray-100 outline-none focus:border focus:border-[#87bba2] rounded-lg p-3' placeholder='Type something to search' />
                 <div className='absolute top-1/2 mr-2 -translate-y-1/2 gap-2 flex items-center right-0'>
