@@ -173,8 +173,8 @@ const Sidebar = ({
                 </NavLink>
               );
             })}
-            <button onClick={handleLogout} className="ml-3 flex items-center gap-2 px-6 font-semibold bg-[#55828b] text-white rounded-lg py-3 border">
-              <RiLogoutCircleLine/><span>Logout</span>
+            <button onClick={handleLogout} className={`flex items-center  ${collapsed ? "px-3 ml-1" : "px-6 ml-3 gap-2"} font-semibold bg-[#55828b] text-white rounded-lg py-3 border`}>
+              <RiLogoutCircleLine/><span>{collapsed ? "" : "Logout"}</span>
             </button>
         </nav>
         <div className="h-[10vh] flex items-center gap-2 px-4 font-semibold">
