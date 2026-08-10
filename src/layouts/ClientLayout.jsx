@@ -44,7 +44,7 @@ return <div className="w-screen h-screen flex">
 
     />
 
-   <div className="flex flex-col">
+   <div className="flex flex-1 flex-col">
    <NavBar setMobileOpen = {setMobileOpen}/>
     <Outlet/>
    </div>
