@@ -46,10 +46,8 @@ const Sidebar = ({
           bg-[#ecf2ef] text-[#2d4347]
           shadow-lg lg:shadow-none
           transition-all duration-300
-
           ${collapsed ? "lg:w-16" : "lg:w-[20vw] w-[80vw]"}
           w-72
-
           ${
             mobileOpen
               ? "translate-x-0"
