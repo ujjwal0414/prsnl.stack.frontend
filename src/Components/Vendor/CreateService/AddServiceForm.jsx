@@ -195,7 +195,7 @@ export  function AddServiceForm() {
                           value={form.pricePerHour}
                           onChange={(e) => update("pricePerHour", e.target.value)}
                           placeholder="500"
-                          className="input !pl-[2.4vw]"
+                          className="input pl-[2.4vw]!"
                         />
                       </div>
                     </Field>
@@ -268,7 +268,7 @@ export  function AddServiceForm() {
                           d.isClosed ? "bg-[#F3F5F3] border-[#E4E9E5]" : "bg-[#F8FAF8] border-[#D8E1DB]"
                         }`}
                       >
-                        <span className="heading-font w-[4.2vw] min-w-[42px] text-[#1F2D2A] text-[clamp(12px,0.9vw,14px)] font-semibold">
+                        <span className="heading-font w-[4.2vw] min-w-10.5 text-[#1F2D2A] text-[clamp(12px,0.9vw,14px)] font-semibold">
                           {d.day}
                         </span>
                         <button
