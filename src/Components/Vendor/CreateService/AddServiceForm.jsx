@@ -1,397 +1,418 @@
 import React, { useState, useMemo } from "react";
+import {
+  Briefcase,
+  MapPin,
+  Clock,
+  IndianRupee,
+  Check,
+  Plus,
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+} from "lucide-react";
 
 /**
- * AddServiceForm
+ * CreateService
  * ------------------------------------------------------------------
- * Ticket / work-order themed form for a vendor to file a new service
- * (matches the `serviceSchema` sub-document: category, title, address,
- * geo location, weekly availability, and price per hour).
- *
- * Sizing intentionally uses vw/vh so the ticket scales with the
- * viewport rather than snapping at fixed breakpoints. Font sizes are
- * clamped so they stay legible at extreme widths.
+ * Matches the ToolBox dashboard shell: sage-mint background, dark
+ * teal-navy for active/primary surfaces, muted teal for secondary
+ * actions, rounded-2xl cards, outline icons. Built to sit in the
+ * content area next to the existing sidebar.
  * ------------------------------------------------------------------
  */
 
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const CATEGORIES = ["Healthcare", "Tech", "Home Services", "Freelance", "Wellness", "Other"];
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const STEPS = [
-  { id: "details", label: "Service Details" },
-  { id: "location", label: "Location" },
-  { id: "availability", label: "Availability" },
-  { id: "review", label: "File Ticket" },
+const TABS = [
+  { id: "details", label: "Details", icon: Briefcase },
+  { id: "location", label: "Location", icon: MapPin },
+  { id: "availability", label: "Availability", icon: Clock },
+  { id: "review", label: "Review", icon: Check },
 ];
 
 const emptySlot = () => ({ startTime: "09:00", endTime: "17:00" });
 
-function toMinutes(hhmm) {
-  const [h, m] = hhmm.split(":").map(Number);
-  return h * 60 + m;
-}
-
-export  function AddServiceForm({ onSubmit }) {
-  const [stepIndex, setStepIndex] = useState(0);
+export  function AddServiceForm() {
+  const [activeTab, setActiveTab] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-
   const [form, setForm] = useState({
     category: "",
     title: "",
     description: "",
-    address: { line1: "", city: "", state: "", zip: "" },
     pricePerHour: "",
-    availability: DAYS.map((day) => ({ day, isClosed: false, slots: [emptySlot()] })),
+    address: { line1: "", city: "", state: "", zip: "" },
+    availability: DAYS.map((day) => ({ day, isClosed: day === "Sun", slots: [emptySlot()] })),
   });
 
-  const ticketNumber = useMemo(
-    () => `SVC-${Math.floor(100000 + Math.random() * 899999)}`,
-    []
-  );
+  const completion = useMemo(() => {
+    let done = 0;
+    if (form.category && form.title && form.pricePerHour) done++;
+    if (form.address.line1 && form.address.city && form.address.state && form.address.zip) done++;
+    if (form.availability.some((d) => !d.isClosed)) done++;
+    return done;
+  }, [form]);
 
-  const step = STEPS[stepIndex];
-
-  const updateField = (path, value) => {
+  const update = (path, value) => {
     setForm((prev) => {
       const next = structuredClone(prev);
-      let ref = next;
       const keys = path.split(".");
+      let ref = next;
       for (let i = 0; i < keys.length - 1; i++) ref = ref[keys[i]];
       ref[keys[keys.length - 1]] = value;
       return next;
     });
   };
 
-  const toggleClosed = (dayIndex) => {
+  const toggleClosed = (i) => {
     setForm((prev) => {
       const next = structuredClone(prev);
-      next.availability[dayIndex].isClosed = !next.availability[dayIndex].isClosed;
+      next.availability[i].isClosed = !next.availability[i].isClosed;
       return next;
     });
   };
 
-  const updateSlot = (dayIndex, slotIndex, field, value) => {
+  const updateSlot = (dayIdx, slotIdx, field, value) => {
     setForm((prev) => {
       const next = structuredClone(prev);
-      next.availability[dayIndex].slots[slotIndex][field] = value;
+      next.availability[dayIdx].slots[slotIdx][field] = value;
       return next;
     });
   };
 
-  const addSlot = (dayIndex) => {
+  const addSlot = (dayIdx) => {
     setForm((prev) => {
       const next = structuredClone(prev);
-      next.availability[dayIndex].slots.push(emptySlot());
+      next.availability[dayIdx].slots.push(emptySlot());
       return next;
     });
   };
 
-  const canAdvance = () => {
-    if (step.id === "details") return form.category && form.title.trim() && form.pricePerHour;
-    if (step.id === "location")
-      return form.address.line1 && form.address.city && form.address.state && form.address.zip;
-    return true;
+  const removeSlot = (dayIdx, slotIdx) => {
+    setForm((prev) => {
+      const next = structuredClone(prev);
+      next.availability[dayIdx].slots.splice(slotIdx, 1);
+      return next;
+    });
   };
 
-  const goNext = () => {
-    if (stepIndex < STEPS.length - 1) setStepIndex(stepIndex + 1);
-  };
-  const goBack = () => {
-    if (stepIndex > 0) setStepIndex(stepIndex - 1);
-  };
-
-  const handleFile = () => {
-    const payload = {
-      ...form,
-      pricePerHour: Number(form.pricePerHour),
-      availability: form.availability.map((d) => ({
-        ...d,
-        slots: d.isClosed
-          ? []
-          : d.slots.map((s) => ({ startTime: toMinutes(s.startTime), endTime: toMinutes(s.endTime) })),
-      })),
-    };
-    setSubmitted(true);
-    onSubmit?.(payload);
-  };
+  const handleSubmit = () => setSubmitted(true);
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-[#ECEAE2] py-[4vh] px-[3vw]"
+      className="min-h-[100vh] w-full bg-[#E7EEE9] px-[3vw] py-[4vh]"
       style={{ fontFamily: "'Inter', ui-sans-serif, system-ui" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
-        .ticket-font { font-family: 'Space Mono', monospace; }
-        .stub-hole {
-          background: radial-gradient(circle, transparent 0, transparent 60%, #ECEAE2 61%);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+        .heading-font { font-family: 'Poppins', ui-sans-serif, system-ui; }
+        input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.6; }
       `}</style>
 
-      <div
-        className="relative w-full max-w-[92vw] lg:max-w-[74vw] bg-[#F5F3EC] shadow-[0_1.5vh_3vh_rgba(36,38,43,0.18)] flex flex-col lg:flex-row"
-        style={{ border: "0.15vh solid #24262B" }}
-      >
-        {/* ── Left: numbered steps + active form ─────────────────── */}
-        <div className="flex-1 p-[3.5vh_3.5vw] lg:p-[4vh_3vw]">
-          <div className="flex items-baseline justify-between mb-[3vh] border-b border-[#B9B4A8] pb-[2vh]">
-            <div>
-              <p className="ticket-font text-[#A23B2E] text-[clamp(11px,1vw,13px)] tracking-[0.25em] uppercase">
-                Vendor Work Order
-              </p>
-              <h1 className="text-[#24262B] font-semibold text-[clamp(20px,2.4vw,32px)] leading-tight mt-[0.5vh]">
-                File a New Service
-              </h1>
-            </div>
-            <p className="ticket-font text-[#24262B]/60 text-[clamp(10px,0.9vw,13px)]">
-              {ticketNumber}
+      <div className="max-w-[68vw] min-w-[320px] mx-auto">
+        {/* ── Page header ─────────────────────────────────────── */}
+        <div className="flex items-center justify-between mb-[3.2vh] flex-wrap gap-[1.4vh]">
+          <div>
+            <p className="text-[#5C8B93] text-[clamp(11px,0.85vw,13px)] font-semibold tracking-[0.08em] uppercase flex items-center gap-[0.4vw]">
+              <Sparkles size={14} strokeWidth={2.5} />
+              Vendor Tools
+            </p>
+            <h1 className="heading-font text-[#1F2D2A] text-[clamp(22px,2.1vw,30px)] font-bold mt-[0.4vh]">
+              Create Service
+            </h1>
+            <p className="text-[#6B7B75] text-[clamp(12px,0.9vw,14px)] mt-[0.4vh]">
+              Add a new offering clients can discover and book.
             </p>
           </div>
 
-          {/* Step rail — numbered because these are literal sequential stages */}
-          <ol className="flex flex-wrap gap-x-[2vw] gap-y-[1vh] mb-[3.5vh]">
-            {STEPS.map((s, i) => (
-              <li key={s.id} className="flex items-center gap-[0.6vw]">
-                <span
-                  className={`ticket-font flex items-center justify-center w-[3.6vh] h-[3.6vh] text-[clamp(11px,0.9vw,13px)] rounded-full border ${
-                    i === stepIndex
-                      ? "bg-[#A23B2E] text-[#F5F3EC] border-[#A23B2E]"
-                      : i < stepIndex
-                      ? "bg-[#3F6B4E] text-[#F5F3EC] border-[#3F6B4E]"
-                      : "text-[#24262B]/50 border-[#B9B4A8]"
-                  }`}
-                >
-                  {i < stepIndex ? "✓" : i + 1}
-                </span>
-                <span
-                  className={`text-[clamp(11px,0.85vw,14px)] ${
-                    i === stepIndex ? "text-[#24262B] font-semibold" : "text-[#24262B]/50"
-                  }`}
-                >
-                  {s.label}
-                </span>
-              </li>
+          {/* progress pill */}
+          <div className="bg-white rounded-2xl px-[1.4vw] py-[1.2vh] shadow-[0_0.4vh_1.2vh_rgba(31,45,42,0.06)] border border-[#D8E1DB] flex items-center gap-[0.8vw]">
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className={`w-[1.1vh] h-[1.1vh] rounded-full ${
+                  i < completion ? "bg-[#20343A]" : "bg-[#D8E1DB]"
+                }`}
+              />
             ))}
-          </ol>
+            <span className="text-[#6B7B75] text-[clamp(11px,0.8vw,12px)] font-medium ml-[0.3vw]">
+              {completion}/3 sections complete
+            </span>
+          </div>
+        </div>
 
+        {/* ── Tab pills, styled like the sidebar's active nav item ─ */}
+        <div className="flex gap-[0.8vw] mb-[2.6vh] flex-wrap">
+          {TABS.map((tab, i) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === i;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(i)}
+                className={`flex items-center gap-[0.6vw] px-[1.4vw] py-[1.3vh] rounded-xl text-[clamp(12px,0.9vw,14px)] font-semibold transition-colors ${
+                  isActive
+                    ? "bg-[#20343A] text-[#EAF1EC]"
+                    : "bg-white text-[#3E4F4A] border border-[#D8E1DB] hover:border-[#5C8B93]"
+                }`}
+              >
+                <Icon size={16} strokeWidth={2.2} />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ── Card body ───────────────────────────────────────── */}
+        <div className="bg-white rounded-2xl border border-[#D8E1DB] shadow-[0_0.6vh_2vh_rgba(31,45,42,0.06)] p-[3.2vh_2.6vw]">
           {!submitted ? (
             <>
-              {step.id === "details" && (
-                <div className="space-y-[2.2vh]">
-                  <Field label="Category">
-                    <select
-                      value={form.category}
-                      onChange={(e) => updateField("category", e.target.value)}
-                      className="ticket-input"
-                    >
-                      <option value="">Select a category</option>
-                      {CATEGORIES.map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                      ))}
-                    </select>
-                  </Field>
-                  <Field label="Service Title">
+              {TABS[activeTab].id === "details" && (
+                <div className="space-y-[2.4vh]">
+                  <SectionTitle icon={Briefcase} title="What are you offering?" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-[1.6vw]">
+                    <Field label="Category">
+                      <select
+                        value={form.category}
+                        onChange={(e) => update("category", e.target.value)}
+                        className="input"
+                      >
+                        <option value="">Select category</option>
+                        {CATEGORIES.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </Field>
+                    <Field label="Price per hour">
+                      <div className="relative">
+                        <IndianRupee
+                          size={15}
+                          className="absolute left-[0.9vw] top-1/2 -translate-y-1/2 text-[#8CA39C]"
+                        />
+                        <input
+                          type="number"
+                          min="0"
+                          value={form.pricePerHour}
+                          onChange={(e) => update("pricePerHour", e.target.value)}
+                          placeholder="500"
+                          className="input !pl-[2.4vw]"
+                        />
+                      </div>
+                    </Field>
+                  </div>
+                  <Field label="Service title">
                     <input
                       value={form.title}
-                      onChange={(e) => updateField("title", e.target.value)}
+                      onChange={(e) => update("title", e.target.value)}
                       placeholder="e.g. General Physician Consultation"
-                      className="ticket-input"
+                      className="input"
                     />
                   </Field>
                   <Field label="Description">
                     <textarea
+                      rows={4}
                       value={form.description}
-                      onChange={(e) => updateField("description", e.target.value)}
-                      rows={3}
-                      placeholder="What does this service cover?"
-                      className="ticket-input resize-none"
-                    />
-                  </Field>
-                  <Field label="Price per Hour (₹)">
-                    <input
-                      type="number"
-                      min="0"
-                      value={form.pricePerHour}
-                      onChange={(e) => updateField("pricePerHour", e.target.value)}
-                      placeholder="500"
-                      className="ticket-input"
+                      onChange={(e) => update("description", e.target.value)}
+                      placeholder="Tell clients what this service covers, what to expect, and anything they should prepare."
+                      className="input resize-none"
                     />
                   </Field>
                 </div>
               )}
 
-              {step.id === "location" && (
-                <div className="space-y-[2.2vh]">
-                  <Field label="Address Line">
+              {TABS[activeTab].id === "location" && (
+                <div className="space-y-[2.4vh]">
+                  <SectionTitle icon={MapPin} title="Where is this service based?" />
+                  <Field label="Address line">
                     <input
                       value={form.address.line1}
-                      onChange={(e) => updateField("address.line1", e.target.value)}
-                      className="ticket-input"
+                      onChange={(e) => update("address.line1", e.target.value)}
+                      placeholder="Street, building, area"
+                      className="input"
                     />
                   </Field>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-[1.5vw]">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-[1.6vw]">
                     <Field label="City">
                       <input
                         value={form.address.city}
-                        onChange={(e) => updateField("address.city", e.target.value)}
-                        className="ticket-input"
+                        onChange={(e) => update("address.city", e.target.value)}
+                        className="input"
                       />
                     </Field>
                     <Field label="State">
                       <input
                         value={form.address.state}
-                        onChange={(e) => updateField("address.state", e.target.value)}
-                        className="ticket-input"
+                        onChange={(e) => update("address.state", e.target.value)}
+                        className="input"
                       />
                     </Field>
-                    <Field label="ZIP">
+                    <Field label="ZIP code">
                       <input
                         value={form.address.zip}
-                        onChange={(e) => updateField("address.zip", e.target.value)}
-                        className="ticket-input"
+                        onChange={(e) => update("address.zip", e.target.value)}
+                        className="input"
                       />
                     </Field>
                   </div>
                 </div>
               )}
 
-              {step.id === "availability" && (
-                <div className="space-y-[1.6vh]">
-                  {form.availability.map((d, di) => (
-                    <div key={d.day} className="flex flex-wrap items-center gap-[1vw] border-b border-[#B9B4A8]/60 pb-[1.4vh]">
-                      <span className="ticket-font w-[5vw] min-w-10.5 text-[#24262B] text-[clamp(11px,0.9vw,13px)]">
-                        {d.day}
-                      </span>
-                      <label className="flex items-center gap-[0.5vw] text-[clamp(11px,0.85vw,13px)] text-[#24262B]/70">
-                        <input type="checkbox" checked={d.isClosed} onChange={() => toggleClosed(di)} />
-                        Closed
-                      </label>
-                      {!d.isClosed &&
-                        d.slots.map((slot, si) => (
-                          <div key={si} className="flex items-center gap-[0.5vw]">
-                            <input
-                              type="time"
-                              value={slot.startTime}
-                              onChange={(e) => updateSlot(di, si, "startTime", e.target.value)}
-                              className="ticket-input w-[9vw]! min-w-27.5! py-[0.6vh]!"
-                            />
-                            <span className="text-[#24262B]/50">–</span>
-                            <input
-                              type="time"
-                              value={slot.endTime}
-                              onChange={(e) => updateSlot(di, si, "endTime", e.target.value)}
-                              className="ticket-input w-[9vw]! min-w-27.5! py-[0.6vh]!"
-                            />
-                          </div>
-                        ))}
-                      {!d.isClosed && (
+              {TABS[activeTab].id === "availability" && (
+                <div className="space-y-[2.4vh]">
+                  <SectionTitle icon={Clock} title="When are you available?" />
+                  <div className="space-y-[1.4vh]">
+                    {form.availability.map((d, di) => (
+                      <div
+                        key={d.day}
+                        className={`flex flex-wrap items-center gap-[1vw] rounded-xl px-[1.2vw] py-[1.4vh] border ${
+                          d.isClosed ? "bg-[#F3F5F3] border-[#E4E9E5]" : "bg-[#F8FAF8] border-[#D8E1DB]"
+                        }`}
+                      >
+                        <span className="heading-font w-[4.2vw] min-w-[42px] text-[#1F2D2A] text-[clamp(12px,0.9vw,14px)] font-semibold">
+                          {d.day}
+                        </span>
                         <button
-                          type="button"
-                          onClick={() => addSlot(di)}
-                          className="ticket-font text-[#3F6B4E] text-[clamp(10px,0.8vw,12px)] hover:underline"
+                          onClick={() => toggleClosed(di)}
+                          className={`text-[clamp(11px,0.8vw,12px)] font-medium px-[0.9vw] py-[0.6vh] rounded-lg border ${
+                            d.isClosed
+                              ? "bg-white text-[#6B7B75] border-[#D8E1DB]"
+                              : "bg-[#20343A] text-white border-[#20343A]"
+                          }`}
                         >
-                          + slot
+                          {d.isClosed ? "Closed" : "Open"}
                         </button>
-                      )}
-                    </div>
-                  ))}
+
+                        {!d.isClosed && (
+                          <div className="flex items-center gap-[0.8vw] flex-wrap">
+                            {d.slots.map((slot, si) => (
+                              <div key={si} className="flex items-center gap-[0.4vw] bg-white rounded-lg border border-[#D8E1DB] px-[0.6vw] py-[0.5vh]">
+                                <input
+                                  type="time"
+                                  value={slot.startTime}
+                                  onChange={(e) => updateSlot(di, si, "startTime", e.target.value)}
+                                  className="bg-transparent text-[clamp(11px,0.8vw,13px)] text-[#1F2D2A] outline-none"
+                                />
+                                <span className="text-[#8CA39C]">–</span>
+                                <input
+                                  type="time"
+                                  value={slot.endTime}
+                                  onChange={(e) => updateSlot(di, si, "endTime", e.target.value)}
+                                  className="bg-transparent text-[clamp(11px,0.8vw,13px)] text-[#1F2D2A] outline-none"
+                                />
+                                {d.slots.length > 1 && (
+                                  <button onClick={() => removeSlot(di, si)} className="text-[#B9C4BF] hover:text-[#A23B2E]">
+                                    <X size={13} />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                            <button
+                              onClick={() => addSlot(di)}
+                              className="flex items-center gap-[0.3vw] text-[#5C8B93] text-[clamp(11px,0.8vw,12px)] font-semibold hover:text-[#20343A]"
+                            >
+                              <Plus size={13} /> Add slot
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
-              {step.id === "review" && (
-                <div className="space-y-[1.4vh] text-[#24262B]">
-                  <p className="text-[clamp(12px,0.95vw,14px)] text-[#24262B]/70">
-                    Confirm the details on the stub, then file the ticket.
-                  </p>
+              {TABS[activeTab].id === "review" && (
+                <div className="space-y-[2.4vh]">
+                  <SectionTitle icon={Check} title="Review before publishing" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-[1.4vw]">
+                    <SummaryCard label="Category" value={form.category || "Not set"} />
+                    <SummaryCard label="Rate" value={form.pricePerHour ? `₹${form.pricePerHour} / hr` : "Not set"} />
+                    <SummaryCard label="Title" value={form.title || "Not set"} />
+                    <SummaryCard label="City" value={form.address.city || "Not set"} />
+                    <SummaryCard
+                      label="Open days"
+                      value={`${form.availability.filter((d) => !d.isClosed).length} of 7`}
+                    />
+                    <SummaryCard label="Address" value={form.address.line1 || "Not set"} />
+                  </div>
                   <button
-                    onClick={handleFile}
-                    className="ticket-font bg-[#A23B2E] text-[#F5F3EC] px-[2.2vw] py-[1.4vh] text-[clamp(12px,0.95vw,14px)] tracking-widest uppercase hover:opacity-90 transition"
+                    onClick={handleSubmit}
+                    className="heading-font w-full sm:w-auto flex items-center justify-center gap-[0.6vw] bg-[#20343A] hover:bg-[#182A2E] text-white px-[2.4vw] py-[1.6vh] rounded-xl text-[clamp(13px,0.95vw,15px)] font-semibold transition-colors"
                   >
-                    Stamp &amp; File Ticket
+                    <Check size={17} strokeWidth={2.5} />
+                    Publish Service
                   </button>
                 </div>
               )}
 
-              {/* Nav */}
-              <div className="flex justify-between mt-[3.5vh] pt-[2vh] border-t border-[#B9B4A8]">
-                <button
-                  onClick={goBack}
-                  disabled={stepIndex === 0}
-                  className="ticket-font text-[clamp(11px,0.85vw,13px)] uppercase tracking-wide text-[#24262B]/60 disabled:opacity-0"
-                >
-                  ← Back
-                </button>
-                {step.id !== "review" && (
+              {/* Bottom nav */}
+              {TABS[activeTab].id !== "review" && (
+                <div className="flex justify-between items-center mt-[3.2vh] pt-[2.2vh] border-t border-[#E4E9E5]">
                   <button
-                    onClick={goNext}
-                    disabled={!canAdvance()}
-                    className="ticket-font text-[clamp(11px,0.85vw,13px)] uppercase tracking-wide text-[#F5F3EC] bg-[#24262B] px-[1.8vw] py-[1.1vh] disabled:opacity-30"
+                    onClick={() => setActiveTab((t) => Math.max(0, t - 1))}
+                    disabled={activeTab === 0}
+                    className="flex items-center gap-[0.3vw] text-[#6B7B75] text-[clamp(12px,0.85vw,13px)] font-medium disabled:opacity-0"
                   >
-                    Next →
+                    <ChevronLeft size={16} /> Back
                   </button>
-                )}
-              </div>
+                  <button
+                    onClick={() => setActiveTab((t) => Math.min(TABS.length - 1, t + 1))}
+                    className="flex items-center gap-[0.4vw] bg-[#5C8B93] hover:bg-[#4C7A82] text-white px-[1.6vw] py-[1.2vh] rounded-xl text-[clamp(12px,0.85vw,13px)] font-semibold transition-colors"
+                  >
+                    Continue <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
             </>
           ) : (
-            <div className="py-[4vh]">
-              <p className="ticket-font text-[#3F6B4E] text-[clamp(13px,1vw,16px)] tracking-widest uppercase">
-                ✓ Ticket Filed
-              </p>
-              <p className="text-[#24262B]/70 text-[clamp(12px,0.95vw,14px)] mt-[1vh]">
-                {form.title} is now listed under {form.category}.
+            <div className="text-center py-[4vh]">
+              <div className="w-[7vh] h-[7vh] rounded-full bg-[#E5EFE8] flex items-center justify-center mx-auto mb-[2vh]">
+                <Check size={28} className="text-[#20343A]" strokeWidth={2.5} />
+              </div>
+              <h2 className="heading-font text-[#1F2D2A] text-[clamp(18px,1.6vw,22px)] font-bold">
+                Service published
+              </h2>
+              <p className="text-[#6B7B75] text-[clamp(12px,0.9vw,14px)] mt-[0.8vh]">
+                {form.title} is now live under {form.category}.
               </p>
             </div>
           )}
         </div>
-
-        {/* ── Right: perforated ticket stub summary ──────────────── */}
-        <div
-          className="lg:w-[26vw] bg-[#24262B] text-[#F5F3EC] p-[3.5vh_3vw] flex flex-col justify-between relative"
-          style={{ borderLeft: "0.15vh dashed #B9B4A8" }}
-        >
-          <div className="hidden lg:flex flex-col gap-[1.4vh] absolute left-[-0.9vh] top-0 bottom-0 justify-around">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <span key={i} className="stub-hole w-[1.8vh] h-[1.8vh] rounded-full bg-[#24262B]" />
-            ))}
-          </div>
-
-          <div>
-            <p className="ticket-font text-[clamp(10px,0.8vw,12px)] tracking-[0.3em] text-[#B9B4A8] uppercase">
-              Stub
-            </p>
-            <p className="ticket-font text-[clamp(14px,1.1vw,18px)] mt-[0.6vh]">{ticketNumber}</p>
-
-            <div className="mt-[3vh] space-y-[1.8vh]">
-              <StubRow label="Category" value={form.category || "—"} />
-              <StubRow label="Title" value={form.title || "—"} />
-              <StubRow label="Rate" value={form.pricePerHour ? `₹${form.pricePerHour}/hr` : "—"} />
-              <StubRow label="City" value={form.address.city || "—"} />
-              <StubRow
-                label="Open Days"
-                value={form.availability.filter((d) => !d.isClosed).length + " / 7"}
-              />
-            </div>
-          </div>
-
-          <p className="ticket-font text-[clamp(9px,0.75vw,11px)] text-[#B9B4A8] mt-[3vh]">
-            Retain this stub for your records.
-          </p>
-        </div>
       </div>
 
       <style>{`
-        .ticket-input {
+        .input {
           width: 100%;
-          background: #FFFFFF;
-          border: 0.12vh solid #B9B4A8;
+          background: #FBFCFB;
+          border: 0.12vh solid #D8E1DB;
+          border-radius: 0.7vh;
           padding: 1.2vh 1vw;
-          font-size: clamp(13px, 0.95vw, 15px);
-          color: #24262B;
+          font-size: clamp(13px, 0.9vw, 14px);
+          color: #1F2D2A;
           outline: none;
+          transition: border-color 0.15s ease;
         }
-        .ticket-input:focus {
-          border-color: #A23B2E;
+        .input:focus {
+          border-color: #5C8B93;
+          background: #FFFFFF;
+        }
+        .input::placeholder {
+          color: #A6B3AE;
         }
       `}</style>
+    </div>
+  );
+}
+
+function SectionTitle({ icon: Icon, title }) {
+  return (
+    <div className="flex items-center gap-[0.7vw] mb-[0.4vh]">
+      <span className="w-[3.6vh] h-[3.6vh] rounded-lg bg-[#EAF1EC] flex items-center justify-center text-[#20343A]">
+        <Icon size={16} strokeWidth={2.2} />
+      </span>
+      <h2 className="heading-font text-[#1F2D2A] text-[clamp(15px,1.1vw,18px)] font-semibold">
+        {title}
+      </h2>
     </div>
   );
 }
@@ -399,7 +420,7 @@ export  function AddServiceForm({ onSubmit }) {
 function Field({ label, children }) {
   return (
     <label className="block">
-      <span className="ticket-font block text-[clamp(10px,0.8vw,12px)] tracking-[0.15em] uppercase text-[#24262B]/60 mb-[0.8vh]">
+      <span className="block text-[#3E4F4A] text-[clamp(11px,0.82vw,13px)] font-medium mb-[0.7vh]">
         {label}
       </span>
       {children}
@@ -407,13 +428,15 @@ function Field({ label, children }) {
   );
 }
 
-function StubRow({ label, value }) {
+function SummaryCard({ label, value }) {
   return (
-    <div>
-      <p className="ticket-font text-[clamp(9px,0.75vw,11px)] tracking-[0.2em] uppercase text-[#B9B4A8]">
+    <div className="bg-[#F8FAF8] border border-[#E4E9E5] rounded-xl px-[1.2vw] py-[1.4vh]">
+      <p className="text-[#6B7B75] text-[clamp(10px,0.75vw,11px)] font-medium uppercase tracking-[0.06em]">
         {label}
       </p>
-      <p className="text-[clamp(13px,1vw,16px)] mt-[0.3vh]">{value}</p>
+      <p className="text-[#1F2D2A] text-[clamp(13px,0.95vw,15px)] font-semibold mt-[0.4vh] truncate">
+        {value}
+      </p>
     </div>
   );
 }
