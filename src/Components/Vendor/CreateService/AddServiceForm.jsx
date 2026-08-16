@@ -101,11 +101,10 @@ export  function AddServiceForm() {
 
   return (
     <div
-      className="min-h-[100vh] w-full bg-[#E7EEE9] px-[3vw] py-[4vh]"
+      className="min-h-screen md:h-screen md:overflow-y-auto w-full bg-[#] px-[3vw] py-[4vh]"
       style={{ fontFamily: "'Inter', ui-sans-serif, system-ui" }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap');
         .heading-font { font-family: 'Poppins', ui-sans-serif, system-ui; }
         input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.6; }
       `}</style>
