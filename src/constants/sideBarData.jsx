@@ -78,5 +78,11 @@ export const sideBarData = [
     path: "/updateDetails",
     icon: <GrDocumentUpdate />,
     role: [ "vendor"],
+  },
+  {
+    name: "Create Service",
+    path: "/createService",
+    icon: <GrDocumentUpdate />,
+    role: [ "vendor"],
   }
 ];
