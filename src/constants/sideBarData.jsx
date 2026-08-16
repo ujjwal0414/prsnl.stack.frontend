@@ -9,10 +9,12 @@ import { MdContacts } from "react-icons/md";
 import { IoGitPullRequestSharp } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoChatbubbles } from "react-icons/io5";
+import { GrDocumentUpdate } from "react-icons/gr";
+
 export const sideBarData = [
   {
     name: "Home",
-    path: "/",
+    path: "",
     icon: <IoHome />,
     role: ["admin", "vendor", "client"],
   },
@@ -71,4 +73,10 @@ export const sideBarData = [
     icon: <IoChatbubbles />,
     role: ["client", "vendor", "admin"],
   },
+  {
+    name: "Update Details",
+    path: "/updateDetails",
+    icon: <GrDocumentUpdate />,
+    role: [ "vendor"],
+  }
 ];

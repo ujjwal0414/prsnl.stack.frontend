@@ -28,6 +28,8 @@ if (isError) {
 }
 if(data){
         const {role:userRole} =data?.data?.data;
+        console.log(data?.data);
+        
         if(role != userRole){
             return (<div className="w-screen h-screen flex flex-col justify-center items-center">
                 <img  src="/role.svg" alt="unauth role" className="w-50 h-50"/>

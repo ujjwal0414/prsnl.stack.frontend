@@ -153,7 +153,7 @@ const Sidebar = ({
               return (
                 <NavLink
                   key={item.path}
-                  to={item.path}
+                  to={`/${role}/${item.path}`}
                   onClick={closeMobileSidebar}
                   className={({ isActive }) =>
                     `flex items-center gap-3 rounded-lg px-3 py-2 transition ${

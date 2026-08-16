@@ -17,6 +17,7 @@ import { UnAuth } from './Components/UnAuthPage'
 import { VendorLayout } from './layouts/VendorLayout'
 import { ClientLayout } from './layouts/ClientLayout'
 import { VendorHome } from './Components/Vendor/Home/VendorHome'
+import { UpdateVendorDetails } from './Components/Vendor/UpdateDetails/UpdateVendorDetails'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -41,6 +42,7 @@ function App() {
         </Route>
         <Route path='vendor' element={<VendorLayout/>}>
           <Route index element={<VendorHome/>}/>
+          <Route path='updateDetails' element={<UpdateVendorDetails/>}/>
         </Route>
         <Route path='admin' element={<AdminLayout/>}>
           <Route index element={<Admin/>}/>
