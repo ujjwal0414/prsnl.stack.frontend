@@ -97,7 +97,11 @@ export  function AddServiceForm() {
     });
   };
 
-  const handleSubmit = () => setSubmitted(true);
+  const handleSubmit = () => {
+    setSubmitted(true)
+    console.log(form);
+    
+  };
 
   return (
     <div
@@ -115,7 +119,7 @@ export  function AddServiceForm() {
           <div>
             <p className="text-[#5C8B93] text-[clamp(11px,0.85vw,13px)] font-semibold tracking-[0.08em] uppercase flex items-center gap-[0.4vw]">
               <Sparkles size={14} strokeWidth={2.5} />
-              Vendor Tools
+              Vendor Space
             </p>
             <h1 className="heading-font text-[#1F2D2A] text-[clamp(22px,2.1vw,30px)] font-bold mt-[0.4vh]">
               Create Service

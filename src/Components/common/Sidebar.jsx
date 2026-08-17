@@ -129,6 +129,7 @@ const Sidebar = ({
                           )
                           .map((child) => (
                             <NavLink
+                              end
                               key={child.path}
                               to={child.path}
                               onClick={closeMobileSidebar}
@@ -152,6 +153,7 @@ const Sidebar = ({
 
               return (
                 <NavLink
+                  end
                   key={item.path}
                   to={`/${role}/${item.path}`}
                   onClick={closeMobileSidebar}
