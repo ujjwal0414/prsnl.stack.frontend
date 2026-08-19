@@ -164,11 +164,55 @@ function SignUp() {
                     <button disabled={SignUpPending} className='w-full flex items-center justify-center py-2 rounded-md font-semibold border-2 mt-8 border-[#55828b]'>SignUp with <img className='h-8 mt-1 ml-1' src="/googleSvg.svg" alt='google' /></button>
                 </div>
             </div>
-            <div className='w-[60vw] relative md:block hidden h-screen  overflow-hidden'>
-                <img src='/soft-hexagon.svg' alt='hexa' className='w-50 transform rotate-z-15 scale-500 h-50 absolute right-70 top-20  ' />
-                {/* <img src='/soft-hexagon.svg' alt='hexa' className='w-50 transform rotate-z-15 scale-500 h-50 absolute left-70 bottom-0  ' /> */}
+            <div className='w-[60vw] relative hidden md:block h-screen overflow-hidden bg-linear-to-br from-[#87bba2] to-[#3f6a72]'>
 
-            </div>
+    {/* keyframes for the floating hexagon cluster */}
+    <style>{`
+        @keyframes tb-float-a { 0%,100% { transform: translateY(0) rotate(12deg); } 50% { transform: translateY(-1.5rem) rotate(20deg); } }
+        @keyframes tb-float-b { 0%,100% { transform: translateY(0) rotate(-12deg); } 50% { transform: translateY(1.25rem) rotate(-20deg); } }
+        @keyframes tb-float-c { 0%,100% { transform: translateY(0) rotate(6deg); } 50% { transform: translateY(-1rem) rotate(-4deg); } }
+        @keyframes tb-drift   { 0%,100% { transform: translateX(0); } 50% { transform: translateX(0.75rem); } }
+        @keyframes tb-pulse   { 0%,100% { opacity: 0.25; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.4); } }
+    `}</style>
+
+    {/* faint blueprint dot grid */}
+    <div
+        className='absolute inset-0 opacity-20'
+        style={{
+            backgroundImage: 'radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px)',
+            backgroundSize: '2rem 2rem'
+        }}
+    />
+
+    <img
+        src='/soft-hexagon.svg'
+        alt=''
+        className='absolute -right-16 top-16 w-72 opacity-70'
+        style={{ animation: 'tb-float-a 9s ease-in-out infinite' }}
+    />
+    <img
+        src='/soft-hexagon.svg'
+        alt=''
+        className='absolute right-40 top-1/2 w-40 opacity-50'
+        style={{ animation: 'tb-float-b 11s ease-in-out infinite' }}
+    />
+    <img
+        src='/soft-hexagon.svg'
+        alt=''
+        className='absolute right-4 bottom-16 w-56 opacity-40'
+        style={{ animation: 'tb-float-c 13s ease-in-out infinite, tb-drift 7s ease-in-out infinite' }}
+    />
+
+    {/* small ambient pulsing dots for extra depth */}
+    <div
+        className='absolute left-1/3 bottom-1/3 h-3 w-3 rounded-full bg-white'
+        style={{ animation: 'tb-pulse 4s ease-in-out infinite' }}
+    />
+    <div
+        className='absolute right-1/4 top-1/4 h-2 w-2 rounded-full bg-white'
+        style={{ animation: 'tb-pulse 5.5s ease-in-out infinite 1s' }}
+    />
+</div>
         </div>
     )
 }
