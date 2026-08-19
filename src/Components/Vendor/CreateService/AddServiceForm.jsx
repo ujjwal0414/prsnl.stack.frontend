@@ -11,7 +11,7 @@ import {
   ChevronLeft,
   Sparkles,
 } from "lucide-react";
-
+import { v4 as uuidv4 } from 'uuid';
 /**
  * CreateService
  * ------------------------------------------------------------------
@@ -98,8 +98,9 @@ export  function AddServiceForm() {
   };
 
   const handleSubmit = () => {
+    const serviceData = {uid:uuidv4(),...form};
     setSubmitted(true)
-    console.log(form);
+    console.log(serviceData);
     
   };
 
