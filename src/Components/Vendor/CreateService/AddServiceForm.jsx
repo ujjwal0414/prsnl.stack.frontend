@@ -12,6 +12,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
+import { useMutation } from "@tanstack/react-query";
+import { createVendorService } from "../../../api/service/createService";
 /**
  * CreateService
  * ------------------------------------------------------------------
@@ -96,12 +98,19 @@ export  function AddServiceForm() {
       return next;
     });
   };
+  const {mutate:createServiceMutation,data:successData,isSuccess,isPending,isError,error} = useMutation({
+    mutationFn:createVendorService,
+    mutationKey:["createVendorService"],
+    onSuccess:((data)=>{
+setSubmitted(true)
+    })
+  })
 
   const handleSubmit = () => {
     const serviceData = {uid:uuidv4(),...form};
-    setSubmitted(true)
-    console.log(serviceData);
     
+    console.log(serviceData);
+    createServiceMutation(serviceData)
   };
 
   return (

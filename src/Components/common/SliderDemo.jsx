@@ -17,7 +17,7 @@ export  function SliderDemo() {
         autoPlay
         autoPlayInterval={3500}
         showThumbnails
-        onSlideChange={(i) => console.log("Active slide:", i)}
+        // onSlideChange={(i) => console.log("Active slide:", i)}
       />
     </div>
   );
