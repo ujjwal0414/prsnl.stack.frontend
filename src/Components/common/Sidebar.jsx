@@ -180,8 +180,8 @@ const Sidebar = ({
             </button>
         </nav>
         <div className="h-[10vh] flex items-center gap-2 px-4 font-semibold">
-          <img src="/userImg.jpg" className="w-12.5 h-12.5 rounded-full border"/>
-          <Link className="w-[50%]" to={`/${role}/profile`}>Profile</Link>
+          <img src="/userImg.jpg" className={`${!collapsed ? "w-12.5 h-12.5 ": "w-9 h-9"} rounded-full border`}/>
+          {!collapsed && <Link className="w-[50%]" to={`/${role}/profile`}>Profile</Link>}
         </div>
       </aside>
     </>

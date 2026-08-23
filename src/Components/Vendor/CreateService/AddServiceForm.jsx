@@ -102,7 +102,8 @@ export  function AddServiceForm() {
     mutationFn:createVendorService,
     mutationKey:["createVendorService"],
     onSuccess:((data)=>{
-setSubmitted(true)
+
+
     })
   })
 

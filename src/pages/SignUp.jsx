@@ -50,10 +50,12 @@ function SignUp() {
         },
         onSuccess:(data)=>{
             setToken(data?.data?.refreshToken)
+            const profileData = data?.data?.profileData;
+            console.log(profileData);
             
             const {_doc:{role}} = data?.data
             setRole(role);
-            navigate(`/${role}`)
+            //navigate(`/${role}`)
         }
     })
     const onSubmit = (data) => {
