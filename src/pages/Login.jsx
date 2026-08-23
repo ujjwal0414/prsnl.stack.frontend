@@ -9,8 +9,9 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { loginUser } from '../api/auth/login.js';
 import { useUserStore } from '../hooks/useUserData.js';
+import useDocumentTitle from '../utils/useDocumentTitle.js';
 function Login() {
-    
+    useDocumentTitle("Login")
     const { register,handleSubmit,formState:{errors} } = useForm();
     const onSubmit = (data) =>{
         const upData = {...data}

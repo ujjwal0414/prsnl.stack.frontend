@@ -8,7 +8,6 @@ const userStore = (set) => ({
     setRole:(role)=>set({role:role}),
     setProfileData:(data)=>set({profileData:data})
 });
-
 const useUserStore = create(
     devtools(
         persist(userStore,{
