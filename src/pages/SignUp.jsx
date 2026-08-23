@@ -12,7 +12,9 @@ import { signUpUser } from '../api/auth/signUp.js';
 import { useDeviceInformation } from '../hooks/useDeviceInfo.js';
 import { useUserStore } from '../hooks/useUserData.js';
 import { useNavigate } from 'react-router';
+import useDocumentTitle from '../utils/useDocumentTitle.js';
 function SignUp() {
+    useDocumentTitle("SignUp")
     const projEnv = useEnv((state) => state.environment)
     const navigate = useNavigate();
     const setToken = useUserStore((state)=> state.setRefreshToken)
