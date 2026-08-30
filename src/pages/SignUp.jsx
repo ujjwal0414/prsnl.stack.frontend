@@ -19,6 +19,7 @@ function SignUp() {
     const navigate = useNavigate();
     const setToken = useUserStore((state)=> state.setRefreshToken)
     const setRole = useUserStore((state)=>state.setRole)
+    const setProfileData = useUserStore((state)=>state.setProfileData)
     const { register, handleSubmit, formState: { errors } } = useForm();
     const roleSelector = [{
         btnCnt: "Client",
@@ -53,11 +54,11 @@ function SignUp() {
         onSuccess:(data)=>{
             setToken(data?.data?.refreshToken)
             const profileData = data?.data?.profileData;
-            console.log(profileData);
+            setProfileData(profileData);
             
             const {_doc:{role}} = data?.data
             setRole(role);
-            //navigate(`/${role}`)
+            navigate(`/${role}/`)
         }
     })
     const onSubmit = (data) => {

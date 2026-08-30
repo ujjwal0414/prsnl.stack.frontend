@@ -20,17 +20,18 @@ function Login() {
    const setToken = useUserStore((state)=> state.setRefreshToken)
     const setRole = useUserStore((state)=>state.setRole)
     const navigate = useNavigate();
+    const setProfileData = useUserStore((state)=>state.setProfileData)
     const {mutate:LoginMutation,isSuccess:isLoginSuccess,error:LoginError,data:LoginData,isPending:isLoginPending,isError:isLoginError} = useMutation({
       mutationFn:loginUser,
       mutationKey:["login"],
       onSuccess:(data)=>{
         console.log(data?.data);
-        const {role,refreshToken} = data.data?.data
-        console.log(data.data?.data);
+        const {role,refreshToken,profileData} = data.data?.data
         
+        setProfileData(profileData)
         setRole(role);
         setToken(refreshToken)
-        //navigate(`/${role}/`)
+        navigate(`/${role}/`)
       }
     })
 
