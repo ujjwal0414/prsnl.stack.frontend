@@ -26,11 +26,11 @@ function Login() {
       onSuccess:(data)=>{
         console.log(data?.data);
         const {role,refreshToken} = data.data?.data
-        console.log(role,refreshToken);
+        console.log(data.data?.data);
         
         setRole(role);
         setToken(refreshToken)
-        navigate(`/${role}`)
+        //navigate(`/${role}/`)
       }
     })
 
