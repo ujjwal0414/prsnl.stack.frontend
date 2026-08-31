@@ -19,6 +19,7 @@ import { ClientLayout } from './layouts/ClientLayout'
 import { VendorHome } from './Components/Vendor/Home/VendorHome'
 import { UpdateVendorDetails } from './Components/Vendor/UpdateDetails/UpdateVendorDetails'
 import { AddServiceForm } from './Components/Vendor/CreateService/AddServiceForm'
+import { VendorDashboard } from './Components/Vendor/Dashboard/Dashoard'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -45,6 +46,7 @@ function App() {
           <Route index element={<VendorHome/>}/>
           <Route path='updateDetails' element={<UpdateVendorDetails/>}/>
           <Route path='createService' element={<AddServiceForm/>}/>
+          <Route path='dashboard' element={<VendorDashboard/>}/>
         </Route>
         <Route path='admin' element={<AdminLayout/>}>
           <Route index element={<Admin/>}/>
