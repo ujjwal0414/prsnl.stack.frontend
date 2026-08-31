@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createVendorService } from "../../../api/service/createService";
 import { useUserStore } from "../../../hooks/useUserData";
 import { Modal } from "../../common/Modal";
+import useDocumentTitle from "../../../utils/useDocumentTitle";
 /**
  * CreateService
  * ------------------------------------------------------------------
@@ -39,6 +40,7 @@ const TABS = [
 const emptySlot = () => ({ startTime: "09:00", endTime: "17:00" });
 
 export  function AddServiceForm() {
+  useDocumentTitle("Create Service")
   const [isModalOpen,setIsModalOpen] = useState(false);
   const [modalText,setModalText] = useState("");
   const [activeTab, setActiveTab] = useState(0);
