@@ -25,10 +25,14 @@ const Modal = ({ isOpen, onClose, companyName = "ToolBox", title, message }) => 
         <div className="relative flex flex-col w-full bg-white border-0 rounded-2xl shadow-2xl outline-none focus:outline-none">
           
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-solid border-slate-100 rounded-t">
-            <h3 className="text-[1.1rem] font-bold tracking-tight text-indigo-600 uppercase">
-              {companyName}
-            </h3>
+          <div className="flex items-center justify-between px-4 py-3 bg-[#edfaf4] border-b border-solid border-slate-100 rounded-t">
+             <div className="flex text-2xl items-center gap-2 ">
+                <h4 className="  font-semibold">Tool<span className="text-[#55828b]">Box</span></h4>
+                <h4 className="text-slate-300"> | </h4>
+                <h4 className=" font-semibold text-lg text-slate-500 ">
+              {title}
+            </h4>
+             </div>
             <button
               className="p-2 ml-auto bg-transparent border-0 text-slate-400 hover:text-slate-600 transition-colors"
               onClick={onClose}
@@ -41,16 +45,14 @@ const Modal = ({ isOpen, onClose, companyName = "ToolBox", title, message }) => 
 
           {/* Body */}
           <div className="relative p-8 flex-auto">
-            <h2 className="text-[1.5rem] font-semibold text-slate-800 mb-4">
-              {title}
-            </h2>
+            
             <p className="text-slate-600 text-[1rem] leading-relaxed">
               {message}
             </p>
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end p-6 space-x-4">
+          {/* <div className="flex items-center justify-end p-6 space-x-4">
             <button
               className="px-6 py-[0.7rem] text-slate-500 font-medium text-[0.9rem] hover:bg-slate-50 rounded-lg transition-all"
               onClick={onClose}
@@ -63,7 +65,7 @@ const Modal = ({ isOpen, onClose, companyName = "ToolBox", title, message }) => 
             >
               Understand
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
