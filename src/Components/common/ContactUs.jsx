@@ -88,7 +88,7 @@ function ContactUs() {
             <div className='pt-[2vh] border-t border-[#F3F4F6] flex justify-end'>
               <button 
                 
-                className='bg-[#55828b] hover:bg-[#466d75] text-white px-5 py-[0.5rem] rounded-xl flex items-center gap-[0.6rem] transition-all duration-300 active:scale-95 shadow-sm shadow-[#55828b]/20'
+                className='bg-[#55828b] hover:bg-[#466d75] text-white px-5 py-2 rounded-xl flex items-center gap-[0.6rem] transition-all duration-300 active:scale-95 shadow-sm shadow-[#55828b]/20'
               >
                 Send Message
                 <ChevronRight size={18} />
