@@ -14,6 +14,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { useMutation } from "@tanstack/react-query";
 import { createVendorService } from "../../../api/service/createService";
+import { useUserStore } from "../../../hooks/useUserData";
 /**
  * CreateService
  * ------------------------------------------------------------------
@@ -102,13 +103,19 @@ export  function AddServiceForm() {
     mutationFn:createVendorService,
     mutationKey:["createVendorService"],
     onSuccess:((data)=>{
+      console.log(data);
+      
 
-
-    })
+    }),
+    onError:(error)=>{
+      console.log(error.response);
+      
+    }
   })
-
+  const userProfile = useUserStore((state)=>state.profileData)
   const handleSubmit = () => {
-    const serviceData = {uid:uuidv4(),...form};
+    const {vendorEmail} = userProfile
+    const serviceData = {serviceID:uuidv4(),serviceCreationData:{...form},userEmail:vendorEmail};
     
     console.log(serviceData);
     createServiceMutation(serviceData)
