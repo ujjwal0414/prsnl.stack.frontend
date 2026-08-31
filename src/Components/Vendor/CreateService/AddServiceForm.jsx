@@ -153,7 +153,7 @@ export  function AddServiceForm() {
         message={`${modalText}`}
       />
     <div
-      className="min-h-screen lg:h-screen lg:overflow-y-auto w-full bg-[#] px-[3vw] py-[4vh]"
+      className="min-h-screen bg-[#F9F8F6] lg:h-screen lg:overflow-y-auto w-full  px-[3vw] py-[4vh]"
       style={{ fontFamily: "'Inter', ui-sans-serif, system-ui" }}
     >
       <style>{`
@@ -161,7 +161,7 @@ export  function AddServiceForm() {
         input[type="time"]::-webkit-calendar-picker-indicator { opacity: 0.6; }
       `}</style>
 
-      <div className="lg:w-[90%] w-[95&] mx-auto">
+      <div className="lg:w-[95%] w-[95&] mx-auto">
         {/* ── Page header ─────────────────────────────────────── */}
         <div className="flex items-center justify-between mb-[3.2vh] flex-wrap gap-[1.4vh]">
           <div>
