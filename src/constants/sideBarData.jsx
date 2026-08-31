@@ -51,7 +51,7 @@ export const sideBarData = [
   },
   {
     name: "Contact Us",
-    path: "/contact",
+    path: "/contactus",
     icon: <MdContacts />,
     role: ["client", "vendor"],
   },

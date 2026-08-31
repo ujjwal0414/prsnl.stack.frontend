@@ -20,6 +20,7 @@ import { VendorHome } from './Components/Vendor/Home/VendorHome'
 import { UpdateVendorDetails } from './Components/Vendor/UpdateDetails/UpdateVendorDetails'
 import { AddServiceForm } from './Components/Vendor/CreateService/AddServiceForm'
 import { VendorDashboard } from './Components/Vendor/Dashboard/Dashoard'
+import { ContactUs } from './Components/common/ContactUs'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -47,6 +48,7 @@ function App() {
           <Route path='updateDetails' element={<UpdateVendorDetails/>}/>
           <Route path='createService' element={<AddServiceForm/>}/>
           <Route path='dashboard' element={<VendorDashboard/>}/>
+          <Route path='contactus' element={<ContactUs/>}/>
         </Route>
         <Route path='admin' element={<AdminLayout/>}>
           <Route index element={<Admin/>}/>
