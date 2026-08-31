@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useMutation } from "@tanstack/react-query";
 import { createVendorService } from "../../../api/service/createService";
 import { useUserStore } from "../../../hooks/useUserData";
+import { Modal } from "../../common/Modal";
 /**
  * CreateService
  * ------------------------------------------------------------------
@@ -38,6 +39,8 @@ const TABS = [
 const emptySlot = () => ({ startTime: "09:00", endTime: "17:00" });
 
 export  function AddServiceForm() {
+  const [isModalOpen,setIsModalOpen] = useState(false);
+  const [modalText,setModalText] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
@@ -104,12 +107,11 @@ export  function AddServiceForm() {
     mutationKey:["createVendorService"],
     onSuccess:((data)=>{
       console.log(data);
-      
-
+      setModalText("Service Created")
     }),
     onError:(error)=>{
       console.log(error.response);
-      
+      setModalText(error?.response?.data?.message || "Some error occured while creating service")
     }
   })
   const userProfile = useUserStore((state)=>state.profileData)
@@ -122,6 +124,14 @@ export  function AddServiceForm() {
   };
 
   return (
+    <>
+    <Modal 
+        isOpen={modalText} 
+        onClose={() => setModalText("")}
+        companyName="Nexas Tech" 
+        title="Software Update Available"
+        message={`${modalText}`}
+      />
     <div
       className="min-h-screen lg:h-screen lg:overflow-y-auto w-full bg-[#] px-[3vw] py-[4vh]"
       style={{ fontFamily: "'Inter', ui-sans-serif, system-ui" }}
@@ -422,6 +432,7 @@ export  function AddServiceForm() {
         }
       `}</style>
     </div>
+    </>
   );
 }
 
