@@ -43,6 +43,14 @@ export  function AddServiceForm() {
   const [modalText,setModalText] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const formHardCOded = {
+    category: "",
+    title: "",
+    description: "",
+    pricePerHour: "",
+    address: { line1: "", city: "", state: "", zip: "" },
+    availability: DAYS.map((day) => ({ day, isClosed: day === "Sun", slots: [emptySlot()] })),
+  }
   const [form, setForm] = useState({
     category: "",
     title: "",
@@ -108,10 +116,14 @@ export  function AddServiceForm() {
     onSuccess:((data)=>{
       console.log(data);
       setModalText("Service Created")
+      setForm(formHardCOded)
+      setActiveTab(0)
     }),
     onError:(error)=>{
       console.log(error.response);
       setModalText(error?.response?.data?.message || "Some error occured while creating service")
+      setForm(formHardCOded)
+      setActiveTab(0)
     }
   })
   const userProfile = useUserStore((state)=>state.profileData)
@@ -120,7 +132,13 @@ export  function AddServiceForm() {
     const serviceData = {serviceID:uuidv4(),serviceCreationData:{...form},userEmail:vendorEmail};
     
     console.log(serviceData);
-    createServiceMutation(serviceData)
+    if(completion<3){
+      setModalText("Enter Service fields")
+      setActiveTab(0)
+    }else{
+      createServiceMutation(serviceData)
+    }
+    
   };
 
   return (
@@ -129,7 +147,7 @@ export  function AddServiceForm() {
         isOpen={modalText} 
         onClose={() => setModalText("")}
         companyName="Nexas Tech" 
-        title="Software Update Available"
+        title="Vendor Service Portal"
         message={`${modalText}`}
       />
     <div

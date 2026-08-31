@@ -25,7 +25,7 @@ const Modal = ({ isOpen, onClose, companyName = "ToolBox", title, message }) => 
         <div className="relative flex flex-col w-full bg-white border-0 rounded-2xl shadow-2xl outline-none focus:outline-none">
           
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#edfaf4] border-b border-solid border-slate-100 rounded-t">
+          <div className="flex items-center justify-between px-4 py-3 bg-[#edfaf4] border-b border-solid border-slate-100 rounded-xl">
              <div className="flex text-2xl items-center gap-2 ">
                 <h4 className="  font-semibold">Tool<span className="text-[#55828b]">Box</span></h4>
                 <h4 className="text-slate-300"> | </h4>
