@@ -30,7 +30,7 @@ function App() {
     const parser = new UAParser();
     const {os} = parser.getResult();
     if(role){
-      navigate(`/${role}`)
+      navigate(`/${role}/`)
     }
     setDeviceInformation(os)
   },[role])
