@@ -21,21 +21,33 @@ import { UpdateVendorDetails } from './Components/Vendor/UpdateDetails/UpdateVen
 import { AddServiceForm } from './Components/Vendor/CreateService/AddServiceForm'
 import { VendorDashboard } from './Components/Vendor/Dashboard/Dashoard'
 import { ContactUs } from './Components/common/ContactUs'
-
+import { useLocation } from 'react-router'
 function App() {
   const [count, setCount] = useState(0)
   const role = useUserStore((state)=>state.role)
   const refreshToken = useUserStore((state)=>state.refreshToken)
   const navigate = useNavigate();
+  const location = useLocation();
   const setDeviceInformation = useDeviceInformation((state) => state.setDeviceInformation)
-  useEffect(()=>{
-    const parser = new UAParser();
-    const {os} = parser.getResult();
-    if(role){
-      navigate(`/${role}/`)
-    }
-    setDeviceInformation(os)
-  },[role])
+  // useEffect(()=>{
+  //   const parser = new UAParser();
+  //   const {os} = parser.getResult();
+  //   if(role){
+  //     navigate(`/${role}/`)
+  //   }
+  //   setDeviceInformation(os)
+  // },[role])
+  useEffect(() => {
+        const parser = new UAParser();
+        const { os } = parser.getResult();
+
+        setDeviceInformation(os);
+
+        // Only redirect from "/"
+        if (role && location.pathname === "/") {
+            navigate(`/${role}/`, { replace: true });
+        }
+    }, [role, location.pathname]);
   return (
     <Routes>
       <Route element={<PrivateComponent/>} >  {/* Role based navigation has to be done */}
