@@ -7,28 +7,44 @@ import {
     Mail,
     User
 } from "lucide-react";
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { pushNotification } from '../../api/notification/pushNotification';
 import { useUserStore } from '../../hooks/useUserData';
+import { Modal } from './Modal';
 function ContactUs() {
     useDocumentTitle("Contact Support");
     const profileData = useUserStore((state)=>state.profileData)
     const [formData, setFormData] = useState({ recipient: 'admin', subject: '', message: '' ,from:profileData?.vendorEmail,n_type:"contactus"});
-
-
-    const {mutate,isPending,isSuccess,isError,error} = useMutation({
+    const queryClient = useQueryClient();
+    const [modalText,setModalText] = useState("");
+    const {mutate,isPending,isSuccess,isError,error,reset} = useMutation({
         mutationFn:pushNotification,
         mutationKey:["pushNotification"],
         onSuccess:((data)=>{
             console.log(data?.data);
-            
+             reset()
+             setModalText("Message Sent")
+             setFormData({ recipient: 'admin', subject: '', message: '' ,from:profileData?.vendorEmail,n_type:"contactus"})
+             setTimeout(()=>{
+setModalText("")
+             },4000)
         }),
         onError:(error)=>{
-            console.log(error?.response);
-            
+            setModalText(error?.response?.data?.message);
+            setTimeout(()=>{
+setModalText("")
+             },4000)
         }
     })
     return (
+        <>
+        <Modal 
+        isOpen={modalText} 
+        onClose={() => setModalText("")}
+        companyName="ToolBox" 
+        title="Contact Support"
+        message={`${modalText}`}
+      />
         <div className='flex-1 min-h-screen flex flex-col items-center bg-[#F9F8F6] py-[4vh]'>
             {/* Header Container */}
             <div className='lg:w-[90%] w-[95%]'>
@@ -106,7 +122,9 @@ function ContactUs() {
                                 onClick={()=>{mutate(formData)}}
                                 className='bg-[#55828b] hover:bg-[#466d75] text-white px-5 py-2 rounded-xl flex items-center gap-[0.6rem] transition-all duration-300 active:scale-95 shadow-sm shadow-[#55828b]/20'
                             >
-                                Send Message
+                                {
+                                    isPending ? "Sending Notification" : isSuccess ? "Message sent" : "Send Message"
+                                }
                                 <ChevronRight size={18} />
                             </button>
                         </div>
@@ -120,6 +138,7 @@ function ContactUs() {
                 </p>
             </div>
         </div>
+        </>
     )
 }
 
