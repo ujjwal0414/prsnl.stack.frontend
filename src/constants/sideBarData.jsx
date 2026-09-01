@@ -10,7 +10,7 @@ import { IoGitPullRequestSharp } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoChatbubbles } from "react-icons/io5";
 import { GrDocumentUpdate } from "react-icons/gr";
-
+import { IoPricetagsOutline } from "react-icons/io5";
 export const sideBarData = [
   {
     name: "Home",
@@ -84,5 +84,11 @@ export const sideBarData = [
     path: "/createService",
     icon: <GrDocumentUpdate />,
     role: [ "vendor"],
+  },
+  {
+    name: "Pricing",
+    path: "/pricing",
+    icon: <IoPricetagsOutline />,
+    role: [ "vendor","client"],
   }
 ];
