@@ -19,6 +19,7 @@ const Sidebar = ({
   const [openMenu, setOpenMenu] = useState("");
   const setRole = useUserStore((state)=>state.setRole);
   const setToken = useUserStore((state)=>state.setRefreshToken);
+  const profileData = useUserStore((state)=>state.profileData)
   const navigate = useNavigate()
   const closeMobileSidebar = () => {
     if (window.innerWidth < 1024) {
@@ -180,7 +181,7 @@ const Sidebar = ({
             </button>
         </nav>
         <div className="h-[10vh] flex items-center gap-2 px-4 font-semibold">
-          <img src="/userImg.jpg" className={`${!collapsed ? "w-12.5 h-12.5 ": "w-9 h-9"} rounded-full border`}/>
+          <img src={`${profileData?.profileImage || "/userImg.jpg"}`} className={`${!collapsed ? "w-12.5 h-12.5 ": "w-9 h-9"} rounded-full border`}/>
           {!collapsed && <Link className="w-[50%]" to={`/${role}/profile`}>Profile</Link>}
         </div>
       </aside>
