@@ -22,9 +22,9 @@ function ContactUs() {
         mutationKey:["pushNotification"],
         onSuccess:((data)=>{
             console.log(data?.data);
-             reset()
+             
              setModalText("Message Sent")
-             setFormData({ recipient: 'admin', subject: '', message: '' ,from:profileData?.vendorEmail,n_type:"contactus"})
+
              setTimeout(()=>{
 setModalText("")
              },4000)
