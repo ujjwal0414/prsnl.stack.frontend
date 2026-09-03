@@ -5,7 +5,8 @@ function IncomeStat({ data }) {
   return (
     <>
     <p className='lg:w-[90%] mt-5 text-gray-500 font-bold w-[95%]'>Income Stats</p>
-    <div className='lg:w-[90%] mt-1 w-[95%] bg-white rounded-3xl p-7 shadow-sm border border-[#E5E7EB]'>
+    {
+      data.length > 0 ? <div className='lg:w-[90%] mt-1 w-[95%] bg-white rounded-3xl p-7 shadow-sm border border-[#E5E7EB]'>
       {/* Grid Layout: 2 columns on mobile, 4 on desktop */}
       <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-[1.5vw]'>
         {data.map((stat, index) => (
@@ -47,7 +48,10 @@ function IncomeStat({ data }) {
           </div>
         ))}
       </div>
-    </div>
+    </div> : <p className='mt-8 text-[16px] text-gray-500'>
+      No stat to show
+    </p>
+    }
     </>
   );
 }
